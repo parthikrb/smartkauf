@@ -9,9 +9,9 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "test": "jest",
-    "test:watch": "npm run test --watch",
-    "test:ci": "npm run test --coverage",
-    "test:badges": "npm run test:ci  && jest-coverage-badges --input coverage/coverage-summary.json --output __badges__",
+    "test:watch": "yarn test --watch",
+    "test:ci": "yarn test --coverage",
+    "test:badges": "yarn test:ci  && jest-coverage-badges --input coverage/coverage-summary.json --output __badges__",
     "lint": "eslint --ext .js,.ts,.tsx src/",
     "format": "prettier --write ./src",
     "prepare": "husky install"

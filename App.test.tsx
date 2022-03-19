@@ -1,11 +1,11 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import renderer, { ReactTestRendererJSON } from 'react-test-renderer';
 
 import App from './App';
 
 describe('<App />', () => {
-  it('has 2 child', () => {
-    const tree: any = renderer.create(<App />).toJSON();
+  it('has 1 child', () => {
+    const tree: ReactTestRendererJSON = renderer.create(<App />).toJSON() as ReactTestRendererJSON;
     expect(tree?.children?.length).toBe(1);
   });
 });
