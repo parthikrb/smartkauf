@@ -22,9 +22,9 @@ jobs:
         uses: expo/expo-github-action@v7
         with:
           expo-version: latest
-          expo-username: ${{ secrets.EXPO_CLI_USERNAME }}
-          expo-password: ${{ secrets.EXPO_CLI_PASSWORD }}
-          expo-packager: ${{ matrix.packager }}
+          username: ${{ secrets.EXPO_CLI_USERNAME }}
+          password: ${{ secrets.EXPO_CLI_PASSWORD }}
+          packager: ${{ matrix.packager }}
       - name: Install Dependencies
         run: npm install
 
