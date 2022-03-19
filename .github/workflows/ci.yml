@@ -1,5 +1,5 @@
 name: End-to-end tests
-on: [push, pull_request]
+on: [push]
 jobs:
   cypress-run:
     runs-on: ubuntu-20.04
@@ -10,5 +10,5 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
-          start: yarn run web
+          start: npx expo start --web
           wait-on: 'http://localhost:19006'
