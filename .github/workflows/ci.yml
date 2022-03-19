@@ -1,11 +1,32 @@
 name: End-to-end tests
 on: [push]
 jobs:
-  cypress-run:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node: [10, 12]
+        packager: [npm, yarn]
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v1
+      - name: Setup Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Setup Expo CLI 3.x
+        uses: expo/expo-github-action@refactor/update-action
+        with:
+          expo-version: 3.x
+          expo-username: ${{ secrets.EXPO_CLI_USERNAME }}
+          expo-password: ${{ secrets.EXPO_CLI_PASSWORD }}
+          expo-packager: ${{ matrix.packager }}
+      - name: Install Dependencies
+        run: npm install
 
       # Install NPM dependencies, cache them correctly
       # and run all Cypress tests
