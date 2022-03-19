@@ -1,0 +1,14 @@
+name: End-to-end tests
+on: [push, pull_request]
+jobs:
+  cypress-run:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Cypress run
+        uses: cypress-io/github-actions@v2
+        with:
+          start: yarn run web
+          wait-on: 'http://localhost:19006'
