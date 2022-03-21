@@ -20,8 +20,7 @@ jobs:
             ${{ runner.os }}-yarn-
 
       - name: 📦 Install dependencies
-        run: yarn install --frozen-lockfile
-        working-directory: ./
+        run: yarn install
 
       - name: 🧪 Jest run
         run: yarn test
@@ -52,8 +51,7 @@ jobs:
             ${{ runner.os }}-yarn-
 
       - name: 📦 Install dependencies
-        run: yarn install --frozen-lockfile
-        working-directory: ./
+        run: yarn install
 
       # Install NPM dependencies, cache them correctly
       # and run all Cypress tests
