@@ -7,12 +7,6 @@ jobs:
       - name: 🏗 Setup repo
         uses: actions/checkout@v3
 
-      - name: 🏗 Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16.x
-          cache: yarn
-
       - name: 📪 Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
@@ -38,12 +32,6 @@ jobs:
     steps:
       - name: 🏗 Setup repo
         uses: actions/checkout@v3
-
-      - name: 🏗 Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16.x
-          cache: yarn
 
       - name: 🏗 Setup Expo
         uses: expo/expo-github-action@v7
