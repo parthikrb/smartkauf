@@ -34,11 +34,11 @@ const Navigation = () => {
           let iconName;
 
           if (route.name === 'Store') {
-            iconName = focused ? 'apps' : 'apps-outline';
+            iconName = focused ? ('apps' as const) : ('apps-outline' as const);
           } else if (route.name === 'Search') {
-            iconName = focused ? 'search-circle' : 'search-circle-outline';
+            iconName = focused ? ('search-circle' as const) : ('search-circle-outline' as const);
           } else if (route.name === 'Cart') {
-            iconName = focused ? 'cart' : 'cart-outline';
+            iconName = focused ? ('cart' as const) : ('cart-outline' as const);
           }
 
           return <Ionicons name={iconName} size={size} color={color} />;
