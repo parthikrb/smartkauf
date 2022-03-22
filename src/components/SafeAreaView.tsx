@@ -1,6 +1,6 @@
 import { StyleSheet, View, Platform, StatusBar } from 'react-native';
 import React, { ReactNode } from 'react';
-import colors from '../../config/colors';
+import colors from '../config/colors';
 
 const SafeAreaView = ({ children }: { children: ReactNode }) => {
   return <View style={styles.SafeArea}>{children}</View>;
