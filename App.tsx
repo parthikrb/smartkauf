@@ -1,12 +1,16 @@
 import React from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { StyleSheet } from 'react-native';
+import Navigation from './src/navigation';
+import SafeAreaView from './src/components/SafeAreaView';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start checking on your app!</Text>
-    </View>
+    <NavigationContainer>
+      <SafeAreaView>
+        <Navigation />
+      </SafeAreaView>
+    </NavigationContainer>
   );
 }
 
