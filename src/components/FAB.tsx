@@ -5,11 +5,12 @@ import colors from '../config/colors';
 
 type FABProps = {
   bottom?: number;
+  onPress: () => void;
 };
 
-const FAB = ({ bottom }: FABProps) => {
+const FAB = ({ bottom, onPress }: FABProps) => {
   return (
-    <TouchableOpacity style={[styles.FAB, { bottom: bottom ? bottom : 20 }]}>
+    <TouchableOpacity style={[styles.FAB, { bottom: bottom ? bottom : 20 }]} onPress={onPress}>
       <Ionicons name="add-outline" size={40} color={colors.white} />
     </TouchableOpacity>
   );
