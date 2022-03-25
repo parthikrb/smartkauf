@@ -5,12 +5,12 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Location from 'expo-location';
 import colors from '../config/colors';
 
-type Props = {
+export type AddStoreProps = {
   visible: boolean;
   toggle: () => void;
 };
 
-const AddStore = ({ visible, toggle }: Props) => {
+const AddStore = ({ visible, toggle }: AddStoreProps) => {
   const [location, setLocation] = useState<string>('Getting Location...');
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
@@ -24,10 +24,7 @@ const AddStore = ({ visible, toggle }: Props) => {
 
       const {
         coords: { latitude, longitude },
-      } = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.Highest,
-        timeInterval: 5000,
-      });
+      } = await Location.getCurrentPositionAsync();
 
       const [position] = await Location.reverseGeocodeAsync({
         latitude,
