@@ -96,6 +96,32 @@ describe('<App />', () => {
                     <Text>
                       StoreScreen
                     </Text>
+                    <Modal
+                      animationType="none"
+                      deviceHeight={null}
+                      deviceWidth={null}
+                      hardwareAccelerated={false}
+                      hideModalContentWhileAnimating={false}
+                      onBackdropPress={[Function]}
+                      onModalHide={[Function]}
+                      onModalWillHide={[Function]}
+                      onModalWillShow={[Function]}
+                      onRequestClose={[Function]}
+                      panResponderThreshold={4}
+                      scrollHorizontal={false}
+                      scrollOffset={0}
+                      scrollOffsetMax={0}
+                      scrollTo={null}
+                      supportedOrientations={
+                        Array [
+                          "portrait",
+                          "landscape",
+                        ]
+                      }
+                      swipeThreshold={100}
+                      transparent={true}
+                      visible={false}
+                    />
                     <View
                       accessible={true}
                       collapsable={false}
