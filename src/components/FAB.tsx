@@ -3,7 +3,7 @@ import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import colors from '../config/colors';
 
-type FABProps = {
+export type FABProps = {
   bottom?: number;
   onPress: () => void;
 };
