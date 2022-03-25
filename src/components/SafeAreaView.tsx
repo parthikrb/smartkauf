@@ -2,7 +2,11 @@ import { StyleSheet, View, Platform, StatusBar } from 'react-native';
 import React, { ReactNode } from 'react';
 import colors from '../config/colors';
 
-const SafeAreaView = ({ children }: { children: ReactNode }) => {
+export type SafeAreaViewProps = {
+  children: ReactNode;
+};
+
+const SafeAreaView = ({ children }: SafeAreaViewProps) => {
   return <View style={styles.SafeArea}>{children}</View>;
 };
 

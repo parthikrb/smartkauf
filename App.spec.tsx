@@ -148,6 +148,7 @@ describe('<App />', () => {
                           "width": 50,
                         }
                       }
+                      testID="FAB"
                     >
                       <View
                         color="#F3F9FC"

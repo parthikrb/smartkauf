@@ -10,7 +10,11 @@ export type FABProps = {
 
 const FAB = ({ bottom, onPress }: FABProps) => {
   return (
-    <TouchableOpacity style={[styles.FAB, { bottom: bottom ? bottom : 20 }]} onPress={onPress}>
+    <TouchableOpacity
+      style={[styles.FAB, { bottom: bottom ? bottom : 20 }]}
+      onPress={onPress}
+      testID="FAB"
+    >
       <Ionicons name="add-outline" size={40} color={colors.white} />
     </TouchableOpacity>
   );

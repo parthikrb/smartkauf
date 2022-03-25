@@ -1,5 +1,5 @@
 import React from 'react';
-import renderer, { ReactTestRendererJSON } from 'react-test-renderer';
+import { fireEvent, render } from '@testing-library/react-native';
 import FAB, { FABProps } from '../../components/FAB';
 import { expect } from '@jest/globals';
 
@@ -11,18 +11,16 @@ const createTestProps: () => FABProps = () => ({
 describe('FAB', () => {
   it('should call onPress callback', () => {
     const props: FABProps = createTestProps();
-    const component = renderer.create(<FAB {...props} />);
-    const tree = component.toJSON() as ReactTestRendererJSON;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    tree.props.onClick();
-    expect(props.onPress).toBeCalled();
+    const rendered = render(<FAB {...props} />);
+    const button = rendered.getByTestId('FAB');
+    fireEvent.press(button);
+    expect(props.onPress).toHaveBeenCalled();
   });
 
   it('displays correctly', () => {
     const props: FABProps = createTestProps();
-    const component = renderer.create(<FAB {...props} />);
-    const tree = component.toJSON() as ReactTestRendererJSON;
-    expect(tree).toMatchInlineSnapshot(`
+    const rendered = render(<FAB {...props} />);
+    expect(rendered).toMatchInlineSnapshot(`
       <View
         accessible={true}
         collapsable={false}
@@ -49,6 +47,7 @@ describe('FAB', () => {
             "width": 50,
           }
         }
+        testID="FAB"
       >
         <View
           color="#F3F9FC"
