@@ -1,5 +1,5 @@
-import { render } from '@testing-library/react-native';
 import React from 'react';
+import { render, waitFor } from '@testing-library/react-native';
 import AddStore, { AddStoreProps } from '../../components/AddStore';
 import { expect } from '@jest/globals';
 
@@ -20,7 +20,7 @@ jest.mock('expo-location', () => ({
       streetNumber: '1',
       district: 'Bairro',
       region: 'Cidade',
-      postalCode: '00000-000',
+      postalCode: '00000',
     },
   ],
 }));
@@ -34,10 +34,15 @@ const createTestProps: (props?: {
 });
 
 describe('AddStore', () => {
-  it('should show the modal by default', () => {
+  it('should show the modal by default and location', async () => {
+    jest.useRealTimers();
     const props: AddStoreProps = createTestProps();
     const rendered = render(<AddStore {...props} />);
-    expect(rendered.getByText('New Store')).toBeTruthy();
+    await waitFor(() => {
+      expect(rendered.getByText('New Store')).toBeTruthy();
+    });
+    expect(rendered.queryByText('Getting Location...')).toBeNull();
+    expect(rendered.getByText('Rua 1, Bairro, Cidade - 00000')).toBeTruthy();
   });
 
   it('should not show the modal when the visible is set to false', () => {
