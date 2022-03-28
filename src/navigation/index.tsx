@@ -36,7 +36,7 @@ const Navigation = () => {
           if (route.name === 'Store') {
             iconName = focused ? ('apps' as const) : ('apps-outline' as const);
           } else if (route.name === 'Search') {
-            iconName = focused ? ('search-circle' as const) : ('search-circle-outline' as const);
+            iconName = focused ? ('search' as const) : ('search-outline' as const);
           } else if (route.name === 'Cart') {
             iconName = focused ? ('cart' as const) : ('cart-outline' as const);
           }

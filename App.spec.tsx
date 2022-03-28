@@ -96,6 +96,66 @@ describe('<App />', () => {
                     <Text>
                       StoreScreen
                     </Text>
+                    <Modal
+                      animationType="none"
+                      deviceHeight={null}
+                      deviceWidth={null}
+                      hardwareAccelerated={false}
+                      hideModalContentWhileAnimating={false}
+                      onBackdropPress={[Function]}
+                      onModalHide={[Function]}
+                      onModalWillHide={[Function]}
+                      onModalWillShow={[Function]}
+                      onRequestClose={[Function]}
+                      panResponderThreshold={4}
+                      scrollHorizontal={false}
+                      scrollOffset={0}
+                      scrollOffsetMax={0}
+                      scrollTo={null}
+                      supportedOrientations={
+                        Array [
+                          "portrait",
+                          "landscape",
+                        ]
+                      }
+                      swipeThreshold={100}
+                      transparent={true}
+                      visible={false}
+                    />
+                    <View
+                      accessible={true}
+                      collapsable={false}
+                      focusable={true}
+                      onClick={[Function]}
+                      onResponderGrant={[Function]}
+                      onResponderMove={[Function]}
+                      onResponderRelease={[Function]}
+                      onResponderTerminate={[Function]}
+                      onResponderTerminationRequest={[Function]}
+                      onStartShouldSetResponder={[Function]}
+                      style={
+                        Object {
+                          "alignItems": "center",
+                          "backgroundColor": "#48A14D",
+                          "borderRadius": 25,
+                          "bottom": 90,
+                          "display": "flex",
+                          "height": 50,
+                          "justifyContent": "center",
+                          "opacity": 1,
+                          "position": "absolute",
+                          "right": 20,
+                          "width": 50,
+                        }
+                      }
+                      testID="FAB"
+                    >
+                      <View
+                        color="#F3F9FC"
+                        name="add-outline"
+                        size={40}
+                      />
+                    </View>
                   </View>
                 </View>
               </View>
@@ -373,7 +433,7 @@ describe('<App />', () => {
                   >
                     <View
                       color="#48A14D"
-                      name="search-circle"
+                      name="search"
                       size={25}
                     />
                   </View>
@@ -397,7 +457,7 @@ describe('<App />', () => {
                   >
                     <View
                       color="#828382"
-                      name="search-circle-outline"
+                      name="search-outline"
                       size={25}
                     />
                   </View>

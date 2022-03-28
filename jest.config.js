@@ -9,6 +9,7 @@ module.exports = {
   collectCoverageFrom: [
     '**/*.{ts,tsx}',
     '!**/coverage/**',
+    '!**/config/**',
     '!**/node_modules/**',
     '!**/babel.config.js',
     '!**/jest.setup.js',
