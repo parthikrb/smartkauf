@@ -1,7 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import React from 'react';
 import { render, waitFor } from '@testing-library/react-native';
 import AddStore, { AddStoreProps } from '../../components/AddStore';
 import { expect } from '@jest/globals';
+
+global.console.warn = jest.fn();
+global.console.error = jest.fn();
 
 jest.mock('expo-location', () => ({
   requestForegroundPermissionsAsync: () => ({
