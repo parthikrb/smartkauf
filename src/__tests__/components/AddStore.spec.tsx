@@ -38,6 +38,13 @@ const createTestProps: (props?: {
   ...props,
 });
 
+// to disable the Reference error
+// ReferenceError: You are trying to `import` a file after the Jest environment has been torn down
+// https://stackoverflow.com/questions/67178109/jest-throwing-reference-error-about-an-import-inside-a-node-modules-dependency
+afterAll(async () => {
+  await new Promise((resolve) => setTimeout(resolve));
+});
+
 describe('AddStore', () => {
   it('should show the modal by default and location', async () => {
     jest.useRealTimers();
