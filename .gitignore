@@ -16,3 +16,5 @@ web-build/
 /coverage/
 /coverage.data
 coverage/
+
+.env

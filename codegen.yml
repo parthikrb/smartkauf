@@ -1,0 +1,25 @@
+overwrite: true
+schema:
+  - '${GRAPHCMS_API}':
+      headers:
+        authorization: Bearer ${GRAPHCMS_TOKEN}
+documents: '**/*.graphql'
+generates:
+  '@types-extensions/graphql.d.ts':
+    plugins:
+      - add:
+          content: /* THIS IS A GENERATED FILE */
+      - typescript-graphql-files-modules
+      - 'typescript-document-nodes'
+  src/generated/graphql.tsx:
+    plugins:
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-apollo'
+      - 'fragment-matcher'
+  ./graphql.schema.json:
+    plugins:
+      - 'introspection'
+hooks:
+  afterAllFileWrite:
+    - prettier --write

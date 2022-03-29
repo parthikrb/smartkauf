@@ -1,0 +1,40 @@
+query getStores {
+  stores {
+    ...storeFragment
+  }
+}
+
+query getStore($id: ID!) {
+  store(where: { id: $id }) {
+    ...storeFragment
+  }
+}
+
+mutation createStore($name: String!, $location: String!) {
+  createStore(data: { name: $name, location: $location }) {
+    id
+    name
+    location
+  }
+}
+
+mutation updateStore($id: ID!, $name: String!, $location: String!) {
+  updateStore(where: { id: $id }, data: { name: $name, location: $location }) {
+    id
+    name
+    location
+  }
+}
+
+mutation deleteStore($id: ID!) {
+  deleteStore(where: { id: $id }) {
+    id
+    name
+  }
+}
+
+fragment storeFragment on Store {
+  id
+  name
+  location
+}
