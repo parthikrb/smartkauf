@@ -1,6 +1,6 @@
 import React from 'react';
+import fetch from 'cross-fetch';
 import { NavigationContainer } from '@react-navigation/native';
-import { StyleSheet } from 'react-native';
 import { ApolloClient, InMemoryCache, ApolloProvider, ApolloLink, HttpLink } from '@apollo/client';
 import { ErrorResponse, onError } from '@apollo/client/link/error';
 import Navigation from './src/navigation';
@@ -21,6 +21,7 @@ export default function App() {
 
   const httpLink = new HttpLink({
     uri: process.env.GRAPHCMS_API,
+    fetch,
   });
 
   const authLink = new ApolloLink((operation, forward) => {
@@ -48,12 +49,3 @@ export default function App() {
     </ApolloProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
