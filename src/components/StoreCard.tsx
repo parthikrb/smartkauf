@@ -2,7 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import colors from '../config/colors';
 
-type StoreCardProps = {
+export type StoreCardProps = {
   name: string;
   location?: string | null | undefined;
 };
