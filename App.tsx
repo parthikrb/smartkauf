@@ -7,7 +7,7 @@ import Navigation from './src/navigation';
 import SafeAreaView from './src/components/SafeAreaView';
 import { GraphQLError } from 'graphql';
 
-export default function App() {
+const App = () => {
   const errorLink = onError(({ graphQLErrors, networkError }: ErrorResponse) => {
     if (graphQLErrors) {
       graphQLErrors.map(({ message }: GraphQLError) => {
@@ -48,4 +48,6 @@ export default function App() {
       </NavigationContainer>
     </ApolloProvider>
   );
-}
+};
+
+export default App;

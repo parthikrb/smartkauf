@@ -4,6 +4,7 @@ import React from 'react';
 import { render, waitFor } from '@testing-library/react-native';
 import AddStore, { AddStoreProps } from '../../components/AddStore';
 import { expect } from '@jest/globals';
+import { MockedProvider } from '@apollo/client/testing';
 
 global.console.warn = jest.fn();
 global.console.error = jest.fn();
@@ -30,6 +31,12 @@ jest.mock('expo-location', () => ({
   ],
 }));
 
+const AddStoreComponent = (props: AddStoreProps) => (
+  <MockedProvider mocks={[]}>
+    <AddStore {...props} />
+  </MockedProvider>
+);
+
 const createTestProps: (props?: {
   [key in keyof AddStoreProps]?: boolean | any;
 }) => AddStoreProps = (props) => ({
@@ -49,23 +56,23 @@ describe('AddStore', () => {
   it('should show the modal by default and location', async () => {
     jest.useRealTimers();
     const props: AddStoreProps = createTestProps();
-    const rendered = render(<AddStore {...props} />);
+    const rendered = render(<AddStoreComponent {...props} />);
     await waitFor(() => {
       expect(rendered.getByText('New Store')).toBeTruthy();
     });
     expect(rendered.queryByText('Getting Location...')).toBeNull();
-    expect(rendered.getByText('Rua 1, Bairro, Cidade - 00000')).toBeTruthy();
+    expect(rendered.getByText('Bairro, Cidade')).toBeTruthy();
   });
 
   it('should not show the modal when the visible is set to false', () => {
     const props: AddStoreProps = createTestProps({ visible: false });
-    const rendered = render(<AddStore {...props} />);
+    const rendered = render(<AddStoreComponent {...props} />);
     expect(rendered.queryByText('New Store')).toBeNull();
   });
 
   it('should display correctly', () => {
     const props = createTestProps();
-    const rendered = render(<AddStore {...props} />);
+    const rendered = render(<AddStoreComponent {...props} />);
     expect(rendered).toMatchInlineSnapshot(`
       <Modal
         animationType="none"
@@ -180,6 +187,7 @@ describe('AddStore', () => {
               New Store
             </Text>
             <TextInput
+              onChangeText={[Function]}
               placeholder="Store Name"
               style={
                 Object {
@@ -193,6 +201,7 @@ describe('AddStore', () => {
                   "width": "80%",
                 }
               }
+              value=""
             />
             <View
               style={
@@ -222,6 +231,11 @@ describe('AddStore', () => {
               </Text>
             </View>
             <View
+              accessibilityState={
+                Object {
+                  "disabled": true,
+                }
+              }
               accessible={true}
               collapsable={false}
               focusable={true}
@@ -235,7 +249,7 @@ describe('AddStore', () => {
               style={
                 Object {
                   "alignItems": "center",
-                  "backgroundColor": "#48A14D",
+                  "backgroundColor": "#828382",
                   "borderRadius": 10,
                   "height": 50,
                   "justifyContent": "center",
