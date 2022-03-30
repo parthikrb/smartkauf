@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { BottomSheet } from 'react-native-btr';
 import { Ionicons } from '@expo/vector-icons';
 import * as Location from 'expo-location';
 import colors from '../config/colors';
+import { useCreateStoreMutation } from '../generated/graphql';
 
 export type AddStoreProps = {
   visible: boolean;
@@ -11,8 +13,23 @@ export type AddStoreProps = {
 };
 
 const AddStore = ({ visible, toggle }: AddStoreProps) => {
+  const [name, setName] = useState<string>('');
   const [location, setLocation] = useState<string>('Getting Location...');
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  const [createStore] = useCreateStoreMutation({
+    variables: {
+      name,
+      location,
+    },
+  });
+
+  const handleAddStore = async () => {
+    if (!name.length || !location.length) return;
+    await createStore();
+    toggle();
+    setName('');
+  };
 
   useEffect(() => {
     void (async () => {
@@ -31,9 +48,7 @@ const AddStore = ({ visible, toggle }: AddStoreProps) => {
         longitude,
       });
 
-      const address = `${position.street as string} ${position.streetNumber as string}, ${
-        position.district as string
-      }, ${position.region as string} - ${position.postalCode as string}`;
+      const address = `${position.district as string}, ${position.region as string}`;
       setLocation(address);
     })();
   }, []);
@@ -48,13 +63,26 @@ const AddStore = ({ visible, toggle }: AddStoreProps) => {
     <BottomSheet visible={visible} onBackButtonPress={toggle} onBackdropPress={toggle}>
       <View style={styles.container}>
         <Text style={styles.title}>New Store</Text>
-
-        <TextInput style={styles.input} placeholder="Store Name" />
+        <TextInput
+          style={styles.input}
+          placeholder="Store Name"
+          value={name}
+          onChangeText={setName}
+        />
         <View style={styles.locationContainer}>
           <Ionicons name="location-outline" size={16} color={colors.black} />
           <Text style={styles.location}>{location}</Text>
         </View>
-        <TouchableOpacity style={styles.button} onPress={toggle}>
+        <TouchableOpacity
+          style={[
+            styles.button,
+            {
+              backgroundColor: !name || !location ? colors.neutral : colors.primary,
+            },
+          ]}
+          onPress={handleAddStore}
+          disabled={!name}
+        >
           <Text style={styles.buttonText}>Add Store</Text>
         </TouchableOpacity>
       </View>
