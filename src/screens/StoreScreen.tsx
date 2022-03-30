@@ -21,7 +21,7 @@ const StoreScreen = () => {
         style={[
           styles.storesContainer,
           {
-            height: Dimensions.get('window').height - 80,
+            height: Dimensions.get('window').height - 160,
           },
         ]}
       >
@@ -43,9 +43,10 @@ export default StoreScreen;
 
 const styles = StyleSheet.create({
   header: {
-    fontSize: 24,
+    fontSize: 32,
     fontWeight: 'bold',
     marginHorizontal: 10,
+    marginVertical: 12,
   },
   storesContainer: {
     width: '100%',

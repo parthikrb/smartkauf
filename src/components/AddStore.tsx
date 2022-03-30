@@ -5,7 +5,7 @@ import { BottomSheet } from 'react-native-btr';
 import { Ionicons } from '@expo/vector-icons';
 import * as Location from 'expo-location';
 import colors from '../config/colors';
-import { useCreateStoreMutation } from '../generated/graphql';
+import { Store, useCreateStoreMutation, StoreFragmentFragmentDoc } from '../generated/graphql';
 
 export type AddStoreProps = {
   visible: boolean;
@@ -21,6 +21,19 @@ const AddStore = ({ visible, toggle }: AddStoreProps) => {
     variables: {
       name,
       location,
+    },
+    update: (cache, { data }) => {
+      cache.modify({
+        fields: {
+          stores(existingStores: Store[] = []) {
+            const newStore = cache.writeFragment({
+              data: data?.createStore,
+              fragment: StoreFragmentFragmentDoc,
+            });
+            return [...existingStores, newStore] as Store[];
+          },
+        },
+      });
     },
   });
 
