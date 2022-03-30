@@ -31,6 +31,8 @@ const StoreScreen = () => {
           key={data && data.stores.length}
           renderItem={({ item }) => <StoreCard {...item} />}
           keyExtractor={(item) => item.id}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
         />
       </View>
       <AddStore visible={visible} toggle={toggleBottomSheet} />
