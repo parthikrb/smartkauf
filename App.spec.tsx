@@ -1,17 +1,28 @@
 import React from 'react';
+import { MockedProvider } from '@apollo/client/testing';
 import renderer, { ReactTestRendererJSON } from 'react-test-renderer';
 import { expect } from '@jest/globals';
 import App from './App';
 
+const AppComponent = () => (
+  <MockedProvider mocks={[]}>
+    <App />
+  </MockedProvider>
+);
+
 describe('<App />', () => {
   it('has 1 root child', () => {
-    const tree: ReactTestRendererJSON = renderer.create(<App />).toJSON() as ReactTestRendererJSON;
+    const tree: ReactTestRendererJSON = renderer
+      .create(<AppComponent />)
+      .toJSON() as ReactTestRendererJSON;
 
     expect(tree?.children?.length).toBe(1);
   });
 
   it('should display correctly', () => {
-    const tree: ReactTestRendererJSON = renderer.create(<App />).toJSON() as ReactTestRendererJSON;
+    const tree: ReactTestRendererJSON = renderer
+      .create(<AppComponent />)
+      .toJSON() as ReactTestRendererJSON;
 
     expect(tree).toMatchInlineSnapshot(`
       <View
@@ -93,9 +104,50 @@ describe('<App />', () => {
                       }
                     }
                   >
-                    <Text>
-                      StoreScreen
+                    <Text
+                      style={
+                        Object {
+                          "fontSize": 24,
+                          "fontWeight": "bold",
+                          "marginHorizontal": 10,
+                        }
+                      }
+                    >
+                      Stores
                     </Text>
+                    <View
+                      style={
+                        Array [
+                          Object {
+                            "overflow": "scroll",
+                            "width": "100%",
+                          },
+                          Object {
+                            "height": 1254,
+                          },
+                        ]
+                      }
+                    >
+                      <RCTScrollView
+                        getItem={[Function]}
+                        getItemCount={[Function]}
+                        keyExtractor={[Function]}
+                        onContentSizeChange={[Function]}
+                        onLayout={[Function]}
+                        onMomentumScrollBegin={[Function]}
+                        onMomentumScrollEnd={[Function]}
+                        onScroll={[Function]}
+                        onScrollBeginDrag={[Function]}
+                        onScrollEndDrag={[Function]}
+                        removeClippedSubviews={false}
+                        renderItem={[Function]}
+                        scrollEventThrottle={50}
+                        stickyHeaderIndices={Array []}
+                        viewabilityConfigCallbackPairs={Array []}
+                      >
+                        <View />
+                      </RCTScrollView>
+                    </View>
                     <Modal
                       animationType="none"
                       deviceHeight={null}
