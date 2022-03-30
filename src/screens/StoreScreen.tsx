@@ -16,7 +16,7 @@ const StoreScreen = () => {
   }, [visible]);
   return (
     <View style={GlobalStyles.screenContainer}>
-      <Text style={styles.header}>Stores</Text>
+      <Text style={GlobalStyles.headerText}>Stores</Text>
       <View
         style={[
           styles.storesContainer,
@@ -44,12 +44,6 @@ const StoreScreen = () => {
 export default StoreScreen;
 
 const styles = StyleSheet.create({
-  header: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    marginHorizontal: 10,
-    marginVertical: 12,
-  },
   storesContainer: {
     width: '100%',
     overflow: 'scroll',
