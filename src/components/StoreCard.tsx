@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import colors from '../config/colors';
 
@@ -7,12 +7,20 @@ type StoreCardProps = {
   location?: string | null | undefined;
 };
 
+type Location = string | null | undefined;
+
+const invalidLocations: Location[] = [
+  '',
+  'Getting Location...',
+  'Permission to access location was denied',
+];
+
 const StoreCard = ({ name, location }: StoreCardProps) => {
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container}>
       <Text style={styles.name}>{name}</Text>
-      <Text style={styles.location}>{location}</Text>
-    </View>
+      {!invalidLocations.includes(location) && <Text style={styles.location}>{location}</Text>}
+    </TouchableOpacity>
   );
 };
 
