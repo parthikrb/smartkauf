@@ -1,6 +1,8 @@
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import React from 'react';
 import colors from '../config/colors';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { StoreStackParamList } from '../navigation';
 
 export type StoreCardProps = {
   name: string;
@@ -16,8 +18,12 @@ const invalidLocations: Location[] = [
 ];
 
 const StoreCard = ({ name, location }: StoreCardProps) => {
+  const navigation: NavigationProp<StoreStackParamList> = useNavigation();
+  const handleNavigation = () => {
+    navigation?.navigate('StoreDetails', { name });
+  };
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={handleNavigation}>
       <Text style={styles.name}>{name}</Text>
       {!invalidLocations.includes(location) && <Text style={styles.location}>{location}</Text>}
     </TouchableOpacity>
