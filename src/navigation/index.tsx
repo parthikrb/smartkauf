@@ -1,4 +1,5 @@
 import React from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { BlurView } from 'expo-blur';
 import StoreScreen from '../screens/StoreScreen';
@@ -7,6 +8,12 @@ import CartScreen from '../screens/CartScreen';
 import { Ionicons } from '@expo/vector-icons';
 import { RouteProp } from '@react-navigation/native';
 import colors from '../config/colors';
+import StoreDetailsScreen from '../screens/StoreDetailsScreen';
+
+export type StoreStackParamList = {
+  StoreHome: undefined;
+  StoreDetails: { name: string; location?: string };
+};
 
 type RootStackParamList = {
   Store: undefined;
@@ -14,7 +21,23 @@ type RootStackParamList = {
   Cart: undefined;
 };
 
+const Stack = createNativeStackNavigator<StoreStackParamList>();
+
 const Tab = createBottomTabNavigator<RootStackParamList>();
+
+const StoreNavigation = () => {
+  return (
+    <Stack.Navigator
+      initialRouteName="StoreHome"
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen name="StoreHome" component={StoreScreen} />
+      <Stack.Screen name="StoreDetails" component={StoreDetailsScreen} />
+    </Stack.Navigator>
+  );
+};
 
 const Navigation = () => {
   return (
@@ -62,7 +85,7 @@ const Navigation = () => {
         tabBarHideOnKeyboard: true,
       })}
     >
-      <Tab.Screen name="Store" component={StoreScreen} />
+      <Tab.Screen name="Store" component={StoreNavigation} />
       <Tab.Screen name="Search" component={SearchScreen} />
       <Tab.Screen name="Cart" component={CartScreen} />
     </Tab.Navigator>

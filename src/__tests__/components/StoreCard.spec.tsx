@@ -2,6 +2,13 @@ import React from 'react';
 import { render } from '@testing-library/react-native';
 import { expect } from '@jest/globals';
 import StoreCard, { StoreCardProps } from '../../components/StoreCard';
+import { NavigationContainer } from '@react-navigation/native';
+
+const StoreCardComponent = (props: StoreCardProps) => (
+  <NavigationContainer>
+    <StoreCard {...props} />
+  </NavigationContainer>
+);
 
 const createTestProps: (props?: {
   [key in keyof StoreCardProps]?: string;
@@ -14,7 +21,7 @@ const createTestProps: (props?: {
 describe('StoreCard', () => {
   it('should not show location but name', () => {
     const props: StoreCardProps = createTestProps();
-    const { getByText, queryByText } = render(<StoreCard {...props} />);
+    const { getByText, queryByText } = render(<StoreCardComponent {...props} />);
     expect(getByText('Store Name')).toBeTruthy();
     expect(queryByText('Getting Location...')).toBeNull();
   });
@@ -23,19 +30,19 @@ describe('StoreCard', () => {
     const props: StoreCardProps = createTestProps({
       location: 'Bairro, Cidade',
     });
-    const { getByText } = render(<StoreCard {...props} />);
+    const { getByText } = render(<StoreCardComponent {...props} />);
     expect(getByText('Store Name')).toBeTruthy();
     expect(getByText('Bairro, Cidade')).toBeTruthy();
   });
 
   it('should display the component correctly', () => {
     const props: StoreCardProps = createTestProps();
-    const rendered = render(<StoreCard {...props} />);
+    const rendered = render(<StoreCardComponent {...props} />);
     expect(rendered).toMatchInlineSnapshot(`
       <View
         accessible={true}
         collapsable={false}
-        focusable={false}
+        focusable={true}
         onClick={[Function]}
         onResponderGrant={[Function]}
         onResponderMove={[Function]}

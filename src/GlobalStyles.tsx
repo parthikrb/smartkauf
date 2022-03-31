@@ -8,6 +8,12 @@ const GlobalStyles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 20,
   },
+  headerText: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    marginHorizontal: 10,
+    marginVertical: 12,
+  },
 });
 
 export default GlobalStyles;

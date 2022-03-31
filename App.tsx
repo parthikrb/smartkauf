@@ -6,6 +6,10 @@ import { ErrorResponse, onError } from '@apollo/client/link/error';
 import Navigation from './src/navigation';
 import SafeAreaView from './src/components/SafeAreaView';
 import { GraphQLError } from 'graphql';
+import { LogBox } from 'react-native';
+
+// https://stackoverflow.com/questions/69768345/react-native-warning-overwriting-font-family-style-attribute-preprocessor
+LogBox.ignoreLogs(['Overwriting fontFamily style attribute preprocessor']);
 
 const App = () => {
   const errorLink = onError(({ graphQLErrors, networkError }: ErrorResponse) => {
