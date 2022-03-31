@@ -3990,6 +3990,29 @@ export enum _SystemDateTimeFieldVariation {
   Localization = 'localization',
 }
 
+export type GetArticlesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetArticlesQuery = {
+  __typename?: 'Query';
+  articles: Array<{
+    __typename?: 'Article';
+    id: string;
+    name: string;
+    quantity?: number | null;
+    price?: number | null;
+    stores: Array<{ __typename?: 'Store'; id: string; name: string }>;
+  }>;
+};
+
+export type ArticleFragmentFragment = {
+  __typename?: 'Article';
+  id: string;
+  name: string;
+  quantity?: number | null;
+  price?: number | null;
+  stores: Array<{ __typename?: 'Store'; id: string; name: string }>;
+};
+
 export type GetStoresQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetStoresQuery = {
@@ -4043,6 +4066,18 @@ export type StoreFragmentFragment = {
   location?: string | null;
 };
 
+export const ArticleFragmentFragmentDoc = gql`
+  fragment ArticleFragment on Article {
+    id
+    name
+    quantity
+    price
+    stores {
+      id
+      name
+    }
+  }
+`;
 export const StoreFragmentFragmentDoc = gql`
   fragment storeFragment on Store {
     id
@@ -4050,6 +4085,51 @@ export const StoreFragmentFragmentDoc = gql`
     location
   }
 `;
+export const GetArticlesDocument = gql`
+  query getArticles {
+    articles {
+      ...ArticleFragment
+    }
+  }
+  ${ArticleFragmentFragmentDoc}
+`;
+
+/**
+ * __useGetArticlesQuery__
+ *
+ * To run a query within a React component, call `useGetArticlesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetArticlesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetArticlesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetArticlesQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetArticlesQuery, GetArticlesQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetArticlesQuery, GetArticlesQueryVariables>(GetArticlesDocument, options);
+}
+export function useGetArticlesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetArticlesQuery, GetArticlesQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetArticlesQuery, GetArticlesQueryVariables>(
+    GetArticlesDocument,
+    options,
+  );
+}
+export type GetArticlesQueryHookResult = ReturnType<typeof useGetArticlesQuery>;
+export type GetArticlesLazyQueryHookResult = ReturnType<typeof useGetArticlesLazyQuery>;
+export type GetArticlesQueryResult = Apollo.QueryResult<
+  GetArticlesQuery,
+  GetArticlesQueryVariables
+>;
 export const GetStoresDocument = gql`
   query getStores {
     stores {
