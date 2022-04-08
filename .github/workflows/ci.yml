@@ -7,7 +7,7 @@ jobs:
       - name: 🏗 Setup repo
         uses: actions/checkout@v3
 
-      - name: 🏗 Setup Node (uses version in .nvmrc)
+      - name: 🏗 Setup Node
         uses: actions/setup-node@v3
 
       - name: 📪 Get yarn cache
@@ -40,7 +40,7 @@ jobs:
           expo-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
-      - name: 🏗 Setup Node (uses version in .nvmrc)
+      - name: 🏗 Setup Node
         uses: actions/setup-node@v3
 
       - name: 📪 Get yarn cache
