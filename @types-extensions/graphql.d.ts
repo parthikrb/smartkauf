@@ -5,6 +5,10 @@ declare module '*/Article.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const getArticles: DocumentNode;
+  export const getArticle: DocumentNode;
+  export const createArticle: DocumentNode;
+  export const updateArticle: DocumentNode;
+  export const deleteArticle: DocumentNode;
   export const ArticleFragment: DocumentNode;
 
   export default defaultDocument;
@@ -49,6 +53,67 @@ export const GetArticles = gql`
     }
   }
   ${ArticleFragment}
+`;
+export const GetArticle = gql`
+  query getArticle($id: ID!) {
+    article(where: { id: $id }) {
+      ...ArticleFragment
+    }
+  }
+  ${ArticleFragment}
+`;
+export const CreateArticle = gql`
+  mutation createArticle(
+    $name: String!
+    $unit: String!
+    $price: Float!
+    $quantity: Float!
+    $store: ID!
+  ) {
+    createArticle(
+      data: {
+        name: $name
+        unit: $unit
+        price: $price
+        quantity: $quantity
+        stores: { connect: { id: $store } }
+      }
+    ) {
+      ...ArticleFragment
+    }
+  }
+  ${ArticleFragment}
+`;
+export const UpdateArticle = gql`
+  mutation updateArticle(
+    $id: ID!
+    $name: String!
+    $unit: String!
+    $price: Float!
+    $quantity: Float!
+    $store: ID!
+  ) {
+    updateArticle(
+      data: {
+        name: $name
+        unit: $unit
+        price: $price
+        quantity: $quantity
+        stores: { connect: { where: { id: $store } } }
+      }
+      where: { id: $id }
+    ) {
+      ...ArticleFragment
+    }
+  }
+  ${ArticleFragment}
+`;
+export const DeleteArticle = gql`
+  mutation deleteArticle($id: ID!) {
+    deleteArticle(where: { id: $id }) {
+      id
+    }
+  }
 `;
 export const GetStores = gql`
   query getStores {

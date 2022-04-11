@@ -4,6 +4,60 @@ query getArticles {
   }
 }
 
+query getArticle($id: ID!) {
+  article(where: { id: $id }) {
+    ...ArticleFragment
+  }
+}
+
+mutation createArticle(
+  $name: String!
+  $unit: String!
+  $price: Float!
+  $quantity: Float!
+  $store: ID!
+) {
+  createArticle(
+    data: {
+      name: $name
+      unit: $unit
+      price: $price
+      quantity: $quantity
+      stores: { connect: { id: $store } }
+    }
+  ) {
+    ...ArticleFragment
+  }
+}
+
+mutation updateArticle(
+  $id: ID!
+  $name: String!
+  $unit: String!
+  $price: Float!
+  $quantity: Float!
+  $store: ID!
+) {
+  updateArticle(
+    data: {
+      name: $name
+      unit: $unit
+      price: $price
+      quantity: $quantity
+      stores: { connect: { where: { id: $store } } }
+    }
+    where: { id: $id }
+  ) {
+    ...ArticleFragment
+  }
+}
+
+mutation deleteArticle($id: ID!) {
+  deleteArticle(where: { id: $id }) {
+    id
+  }
+}
+
 fragment ArticleFragment on Article {
   id
   name
