@@ -58,7 +58,7 @@ describe('AddStore', () => {
     const props: AddStoreProps = createTestProps();
     const rendered = render(<AddStoreComponent {...props} />);
     await waitFor(() => {
-      expect(rendered.getByText('New Store')).toBeTruthy();
+      expect(rendered.getAllByText('Add Store')).toBeTruthy();
     });
     expect(rendered.queryByText('Getting Location...')).toBeNull();
     expect(rendered.getByText('Bairro, Cidade')).toBeTruthy();
@@ -67,7 +67,7 @@ describe('AddStore', () => {
   it('should not show the modal when the visible is set to false', () => {
     const props: AddStoreProps = createTestProps({ visible: false });
     const rendered = render(<AddStoreComponent {...props} />);
-    expect(rendered.queryByText('New Store')).toBeNull();
+    expect(rendered.queryByText('Add Store')).toBeNull();
   });
 
   it('should display correctly', () => {
@@ -184,7 +184,7 @@ describe('AddStore', () => {
                 }
               }
             >
-              New Store
+              Add Store
             </Text>
             <TextInput
               onChangeText={[Function]}
