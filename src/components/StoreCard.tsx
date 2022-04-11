@@ -7,6 +7,7 @@ import { StoreStackParamList } from '../navigation';
 export type StoreCardProps = {
   name: string;
   location?: string | null | undefined;
+  id: string;
 };
 
 type Location = string | null | undefined;
@@ -17,10 +18,10 @@ const invalidLocations: Location[] = [
   'Permission to access location was denied',
 ];
 
-const StoreCard = ({ name, location }: StoreCardProps) => {
+const StoreCard = ({ name, location, id }: StoreCardProps) => {
   const navigation: NavigationProp<StoreStackParamList> = useNavigation();
   const handleNavigation = () => {
-    navigation?.navigate('StoreDetails', { name });
+    navigation?.navigate('StoreDetails', { name, id });
   };
   return (
     <TouchableOpacity style={styles.container} onPress={handleNavigation}>

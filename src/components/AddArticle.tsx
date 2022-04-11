@@ -1,0 +1,193 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
+import React, { useEffect, useState } from 'react';
+import SegmentedControl from '@react-native-segmented-control/segmented-control';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { BottomSheet } from 'react-native-btr';
+import colors from '../config/colors';
+import {
+  Article,
+  ArticleCreateInput,
+  ArticleFragmentFragmentDoc,
+  useCreateArticleMutation,
+} from '../generated/graphql';
+
+type AddArticleProps = {
+  visible: boolean;
+  toggle: () => void;
+  store: string;
+};
+
+const units = ['g', 'kg', 'piece'];
+
+const AddArticle = ({ visible, toggle, store }: AddArticleProps) => {
+  const initialArticle = {
+    name: '',
+    unit: units[0],
+    quantity: 0,
+    price: 0,
+  };
+
+  const [article, setArticle] = useState<ArticleCreateInput>(initialArticle);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [isInvalidArticle, setIsInvalidArticle] = useState(true);
+
+  const [createArticle] = useCreateArticleMutation({
+    variables: {
+      name: article.name,
+      unit: article.unit as 'g' | 'kg' | 'piece',
+      quantity: parseFloat(String(article.quantity)),
+      price: parseFloat(String(article.price)),
+      store,
+    },
+    update: (cache, { data }) => {
+      cache.modify({
+        fields: {
+          articles(existingArticles: Article[] = []) {
+            const newArticle = cache.writeFragment({
+              data: data?.createArticle,
+              fragment: ArticleFragmentFragmentDoc,
+            });
+            return [...existingArticles, newArticle] as Article[];
+          },
+        },
+      });
+    },
+  });
+
+  const handleArticleChange = (name: string, value: string) => {
+    setArticle({
+      ...article,
+      [name]: value,
+    });
+  };
+
+  const handleAddArticle = async () => {
+    if (isInvalidArticle) return;
+    await createArticle();
+    toggle();
+    setArticle(initialArticle);
+  };
+
+  useEffect(() => {
+    setIsInvalidArticle(!(article.name.length && article.quantity > 0 && article.price > 0));
+  }, [article]);
+
+  return (
+    <BottomSheet visible={visible} onBackButtonPress={toggle} onBackdropPress={toggle}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Add Article</Text>
+        <TextInput
+          testID="name"
+          style={styles.input}
+          placeholder="Article Name"
+          value={article.name}
+          onChangeText={(value: string) => handleArticleChange('name', value)}
+        />
+        <View style={styles.quantityContainer}>
+          <TextInput
+            testID="quantity"
+            keyboardType="numeric"
+            style={[
+              styles.input,
+              {
+                width: '30%',
+              },
+            ]}
+            placeholder="Quantity"
+            selectTextOnFocus={true}
+            value={article.quantity?.toString()}
+            onChangeText={(value: string) => handleArticleChange('quantity', value)}
+          />
+          <SegmentedControl
+            style={styles.segmentedControl}
+            fontStyle={{
+              fontSize: 14,
+            }}
+            values={units}
+            selectedIndex={selectedIndex}
+            onChange={(event) => {
+              setSelectedIndex(event.nativeEvent.selectedSegmentIndex);
+              setArticle({
+                ...article,
+                unit: units[event.nativeEvent.selectedSegmentIndex],
+              });
+            }}
+          />
+        </View>
+        <TextInput
+          testID="price"
+          keyboardType="numeric"
+          style={styles.input}
+          placeholder="Price"
+          selectTextOnFocus={true}
+          value={article.price?.toString()}
+          onChangeText={(value: string) => handleArticleChange('price', value)}
+        />
+        <TouchableOpacity
+          style={[
+            styles.button,
+            {
+              backgroundColor: isInvalidArticle ? colors.neutral : colors.primary,
+            },
+          ]}
+          onPress={handleAddArticle}
+          disabled={isInvalidArticle}
+        >
+          <Text style={styles.buttonText}>Add Article</Text>
+        </TouchableOpacity>
+      </View>
+    </BottomSheet>
+  );
+};
+
+export default AddArticle;
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: colors.white,
+    width: '100%',
+    height: 380,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  title: {
+    color: colors.black,
+    fontSize: 32,
+    fontWeight: 'bold',
+    position: 'absolute',
+    top: 20,
+  },
+  input: {
+    borderBottomWidth: 0.8,
+    borderColor: colors.neutral,
+    width: '80%',
+    height: 40,
+    fontSize: 24,
+    padding: 5,
+    paddingBottom: 0,
+    marginBottom: 30,
+  },
+  quantityContainer: {
+    width: '80%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+  },
+  segmentedControl: {
+    height: 40,
+    width: '60%',
+  },
+  button: {
+    backgroundColor: colors.primary,
+    width: '80%',
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    marginVertical: 30,
+  },
+  buttonText: {
+    color: colors.white,
+    fontSize: 24,
+  },
+});

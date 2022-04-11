@@ -46,16 +46,17 @@ export type Article = Node & {
   /** The unique identifier */
   id: Scalars['ID'];
   name: Scalars['String'];
-  price?: Maybe<Scalars['Float']>;
+  price: Scalars['Float'];
   /** The time the document was published. Null on documents in draft stage. */
   publishedAt?: Maybe<Scalars['DateTime']>;
   /** User that last published this document */
   publishedBy?: Maybe<User>;
-  quantity?: Maybe<Scalars['Float']>;
+  quantity: Scalars['Float'];
   scheduledIn: Array<ScheduledOperation>;
   /** System stage field */
   stage: Stage;
   stores: Array<Store>;
+  unit: Scalars['String'];
   /** The time the document was updated */
   updatedAt: Scalars['DateTime'];
   /** User that last updated this document */
@@ -127,9 +128,10 @@ export type ArticleConnection = {
 export type ArticleCreateInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   name: Scalars['String'];
-  price?: InputMaybe<Scalars['Float']>;
-  quantity?: InputMaybe<Scalars['Float']>;
+  price: Scalars['Float'];
+  quantity: Scalars['Float'];
   stores?: InputMaybe<StoreCreateManyInlineInput>;
+  unit: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
@@ -272,6 +274,25 @@ export type ArticleManyWhereInput = {
   stores_every?: InputMaybe<StoreWhereInput>;
   stores_none?: InputMaybe<StoreWhereInput>;
   stores_some?: InputMaybe<StoreWhereInput>;
+  unit?: InputMaybe<Scalars['String']>;
+  /** All values containing the given string. */
+  unit_contains?: InputMaybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  unit_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  unit_in?: InputMaybe<Array<Scalars['String']>>;
+  /** All values that are not equal to given value. */
+  unit_not?: InputMaybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  unit_not_contains?: InputMaybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  unit_not_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  unit_not_in?: InputMaybe<Array<Scalars['String']>>;
+  /** All values not starting with the given string. */
+  unit_not_starts_with?: InputMaybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  unit_starts_with?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>;
@@ -303,6 +324,8 @@ export enum ArticleOrderByInput {
   PublishedAtDesc = 'publishedAt_DESC',
   QuantityAsc = 'quantity_ASC',
   QuantityDesc = 'quantity_DESC',
+  UnitAsc = 'unit_ASC',
+  UnitDesc = 'unit_DESC',
   UpdatedAtAsc = 'updatedAt_ASC',
   UpdatedAtDesc = 'updatedAt_DESC',
 }
@@ -312,6 +335,7 @@ export type ArticleUpdateInput = {
   price?: InputMaybe<Scalars['Float']>;
   quantity?: InputMaybe<Scalars['Float']>;
   stores?: InputMaybe<StoreUpdateManyInlineInput>;
+  unit?: InputMaybe<Scalars['String']>;
 };
 
 export type ArticleUpdateManyInlineInput = {
@@ -335,6 +359,7 @@ export type ArticleUpdateManyInput = {
   name?: InputMaybe<Scalars['String']>;
   price?: InputMaybe<Scalars['Float']>;
   quantity?: InputMaybe<Scalars['Float']>;
+  unit?: InputMaybe<Scalars['String']>;
 };
 
 export type ArticleUpdateManyWithNestedWhereInput = {
@@ -496,6 +521,25 @@ export type ArticleWhereInput = {
   stores_every?: InputMaybe<StoreWhereInput>;
   stores_none?: InputMaybe<StoreWhereInput>;
   stores_some?: InputMaybe<StoreWhereInput>;
+  unit?: InputMaybe<Scalars['String']>;
+  /** All values containing the given string. */
+  unit_contains?: InputMaybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  unit_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  unit_in?: InputMaybe<Array<Scalars['String']>>;
+  /** All values that are not equal to given value. */
+  unit_not?: InputMaybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  unit_not_contains?: InputMaybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  unit_not_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  unit_not_in?: InputMaybe<Array<Scalars['String']>>;
+  /** All values not starting with the given string. */
+  unit_not_starts_with?: InputMaybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  unit_starts_with?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>;
@@ -3998,18 +4042,84 @@ export type GetArticlesQuery = {
     __typename?: 'Article';
     id: string;
     name: string;
-    quantity?: number | null;
-    price?: number | null;
+    quantity: number;
+    price: number;
     stores: Array<{ __typename?: 'Store'; id: string; name: string }>;
   }>;
+};
+
+export type GetArticleQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type GetArticleQuery = {
+  __typename?: 'Query';
+  article?: {
+    __typename?: 'Article';
+    id: string;
+    name: string;
+    quantity: number;
+    price: number;
+    stores: Array<{ __typename?: 'Store'; id: string; name: string }>;
+  } | null;
+};
+
+export type CreateArticleMutationVariables = Exact<{
+  name: Scalars['String'];
+  unit: Scalars['String'];
+  price: Scalars['Float'];
+  quantity: Scalars['Float'];
+  store: Scalars['ID'];
+}>;
+
+export type CreateArticleMutation = {
+  __typename?: 'Mutation';
+  createArticle?: {
+    __typename?: 'Article';
+    id: string;
+    name: string;
+    quantity: number;
+    price: number;
+    stores: Array<{ __typename?: 'Store'; id: string; name: string }>;
+  } | null;
+};
+
+export type UpdateArticleMutationVariables = Exact<{
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  unit: Scalars['String'];
+  price: Scalars['Float'];
+  quantity: Scalars['Float'];
+  store: Scalars['ID'];
+}>;
+
+export type UpdateArticleMutation = {
+  __typename?: 'Mutation';
+  updateArticle?: {
+    __typename?: 'Article';
+    id: string;
+    name: string;
+    quantity: number;
+    price: number;
+    stores: Array<{ __typename?: 'Store'; id: string; name: string }>;
+  } | null;
+};
+
+export type DeleteArticleMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type DeleteArticleMutation = {
+  __typename?: 'Mutation';
+  deleteArticle?: { __typename?: 'Article'; id: string } | null;
 };
 
 export type ArticleFragmentFragment = {
   __typename?: 'Article';
   id: string;
   name: string;
-  quantity?: number | null;
-  price?: number | null;
+  quantity: number;
+  price: number;
   stores: Array<{ __typename?: 'Store'; id: string; name: string }>;
 };
 
@@ -4129,6 +4239,222 @@ export type GetArticlesLazyQueryHookResult = ReturnType<typeof useGetArticlesLaz
 export type GetArticlesQueryResult = Apollo.QueryResult<
   GetArticlesQuery,
   GetArticlesQueryVariables
+>;
+export const GetArticleDocument = gql`
+  query getArticle($id: ID!) {
+    article(where: { id: $id }) {
+      ...ArticleFragment
+    }
+  }
+  ${ArticleFragmentFragmentDoc}
+`;
+
+/**
+ * __useGetArticleQuery__
+ *
+ * To run a query within a React component, call `useGetArticleQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetArticleQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetArticleQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetArticleQuery(
+  baseOptions: Apollo.QueryHookOptions<GetArticleQuery, GetArticleQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetArticleQuery, GetArticleQueryVariables>(GetArticleDocument, options);
+}
+export function useGetArticleLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetArticleQuery, GetArticleQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetArticleQuery, GetArticleQueryVariables>(
+    GetArticleDocument,
+    options,
+  );
+}
+export type GetArticleQueryHookResult = ReturnType<typeof useGetArticleQuery>;
+export type GetArticleLazyQueryHookResult = ReturnType<typeof useGetArticleLazyQuery>;
+export type GetArticleQueryResult = Apollo.QueryResult<GetArticleQuery, GetArticleQueryVariables>;
+export const CreateArticleDocument = gql`
+  mutation createArticle(
+    $name: String!
+    $unit: String!
+    $price: Float!
+    $quantity: Float!
+    $store: ID!
+  ) {
+    createArticle(
+      data: {
+        name: $name
+        unit: $unit
+        price: $price
+        quantity: $quantity
+        stores: { connect: { id: $store } }
+      }
+    ) {
+      ...ArticleFragment
+    }
+  }
+  ${ArticleFragmentFragmentDoc}
+`;
+export type CreateArticleMutationFn = Apollo.MutationFunction<
+  CreateArticleMutation,
+  CreateArticleMutationVariables
+>;
+
+/**
+ * __useCreateArticleMutation__
+ *
+ * To run a mutation, you first call `useCreateArticleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateArticleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createArticleMutation, { data, loading, error }] = useCreateArticleMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *      unit: // value for 'unit'
+ *      price: // value for 'price'
+ *      quantity: // value for 'quantity'
+ *      store: // value for 'store'
+ *   },
+ * });
+ */
+export function useCreateArticleMutation(
+  baseOptions?: Apollo.MutationHookOptions<CreateArticleMutation, CreateArticleMutationVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<CreateArticleMutation, CreateArticleMutationVariables>(
+    CreateArticleDocument,
+    options,
+  );
+}
+export type CreateArticleMutationHookResult = ReturnType<typeof useCreateArticleMutation>;
+export type CreateArticleMutationResult = Apollo.MutationResult<CreateArticleMutation>;
+export type CreateArticleMutationOptions = Apollo.BaseMutationOptions<
+  CreateArticleMutation,
+  CreateArticleMutationVariables
+>;
+export const UpdateArticleDocument = gql`
+  mutation updateArticle(
+    $id: ID!
+    $name: String!
+    $unit: String!
+    $price: Float!
+    $quantity: Float!
+    $store: ID!
+  ) {
+    updateArticle(
+      data: {
+        name: $name
+        unit: $unit
+        price: $price
+        quantity: $quantity
+        stores: { connect: { where: { id: $store } } }
+      }
+      where: { id: $id }
+    ) {
+      ...ArticleFragment
+    }
+  }
+  ${ArticleFragmentFragmentDoc}
+`;
+export type UpdateArticleMutationFn = Apollo.MutationFunction<
+  UpdateArticleMutation,
+  UpdateArticleMutationVariables
+>;
+
+/**
+ * __useUpdateArticleMutation__
+ *
+ * To run a mutation, you first call `useUpdateArticleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateArticleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateArticleMutation, { data, loading, error }] = useUpdateArticleMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      name: // value for 'name'
+ *      unit: // value for 'unit'
+ *      price: // value for 'price'
+ *      quantity: // value for 'quantity'
+ *      store: // value for 'store'
+ *   },
+ * });
+ */
+export function useUpdateArticleMutation(
+  baseOptions?: Apollo.MutationHookOptions<UpdateArticleMutation, UpdateArticleMutationVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<UpdateArticleMutation, UpdateArticleMutationVariables>(
+    UpdateArticleDocument,
+    options,
+  );
+}
+export type UpdateArticleMutationHookResult = ReturnType<typeof useUpdateArticleMutation>;
+export type UpdateArticleMutationResult = Apollo.MutationResult<UpdateArticleMutation>;
+export type UpdateArticleMutationOptions = Apollo.BaseMutationOptions<
+  UpdateArticleMutation,
+  UpdateArticleMutationVariables
+>;
+export const DeleteArticleDocument = gql`
+  mutation deleteArticle($id: ID!) {
+    deleteArticle(where: { id: $id }) {
+      id
+    }
+  }
+`;
+export type DeleteArticleMutationFn = Apollo.MutationFunction<
+  DeleteArticleMutation,
+  DeleteArticleMutationVariables
+>;
+
+/**
+ * __useDeleteArticleMutation__
+ *
+ * To run a mutation, you first call `useDeleteArticleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteArticleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteArticleMutation, { data, loading, error }] = useDeleteArticleMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteArticleMutation(
+  baseOptions?: Apollo.MutationHookOptions<DeleteArticleMutation, DeleteArticleMutationVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<DeleteArticleMutation, DeleteArticleMutationVariables>(
+    DeleteArticleDocument,
+    options,
+  );
+}
+export type DeleteArticleMutationHookResult = ReturnType<typeof useDeleteArticleMutation>;
+export type DeleteArticleMutationResult = Apollo.MutationResult<DeleteArticleMutation>;
+export type DeleteArticleMutationOptions = Apollo.BaseMutationOptions<
+  DeleteArticleMutation,
+  DeleteArticleMutationVariables
 >;
 export const GetStoresDocument = gql`
   query getStores {
