@@ -19,25 +19,28 @@ type AddArticleProps = {
 
 const units = ['g', 'kg', 'piece'];
 
+const BASE_UNIT_INDEX = 0;
+const INITIAL_PRICE_AND_QUANTITY = 0;
+
 const AddArticle = ({ visible, toggle, store }: AddArticleProps) => {
   const initialArticle = {
     name: '',
-    unit: units[0],
-    quantity: 0,
-    price: 0,
+    price: INITIAL_PRICE_AND_QUANTITY,
+    quantity: INITIAL_PRICE_AND_QUANTITY,
+    unit: units[BASE_UNIT_INDEX],
   };
 
   const [article, setArticle] = useState<ArticleCreateInput>(initialArticle);
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(BASE_UNIT_INDEX);
   const [isInvalidArticle, setIsInvalidArticle] = useState(true);
 
   const [createArticle] = useCreateArticleMutation({
     variables: {
       name: article.name,
-      unit: article.unit as 'g' | 'kg' | 'piece',
-      quantity: parseFloat(String(article.quantity)),
       price: parseFloat(String(article.price)),
+      quantity: parseFloat(String(article.quantity)),
       store,
+      unit: article.unit as 'g' | 'kg' | 'piece',
     },
     update: (cache, { data }) => {
       cache.modify({
@@ -69,7 +72,13 @@ const AddArticle = ({ visible, toggle, store }: AddArticleProps) => {
   };
 
   useEffect(() => {
-    setIsInvalidArticle(!(article.name.length && article.quantity > 0 && article.price > 0));
+    setIsInvalidArticle(
+      !(
+        article.name.length &&
+        article.quantity > INITIAL_PRICE_AND_QUANTITY &&
+        article.price > INITIAL_PRICE_AND_QUANTITY
+      ),
+    );
   }, [article]);
 
   return (
@@ -145,8 +154,8 @@ export default AddArticle;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.white,
-    width: '100%',
     height: 380,
+    width: '100%',
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
@@ -160,8 +169,8 @@ const styles = StyleSheet.create({
   input: {
     borderBottomWidth: 0.8,
     borderColor: colors.neutral,
-    width: '80%',
     height: 40,
+    width: '80%',
     fontSize: 24,
     padding: 5,
     paddingBottom: 0,
