@@ -10,7 +10,7 @@ import {
   useUpsertArticleMutation,
 } from '../generated/graphql';
 
-type AddArticleProps = {
+export type AddArticleProps = {
   visible: boolean;
   toggle: () => void;
   store: string;
@@ -141,6 +141,7 @@ const AddArticle = ({ visible, toggle, store }: AddArticleProps) => {
           onChangeText={(value: string) => handleArticleChange('price', value)}
         />
         <TouchableOpacity
+          testID="add-article"
           style={[
             styles.button,
             {
