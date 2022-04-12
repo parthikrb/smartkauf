@@ -6,8 +6,7 @@ declare module '*/Article.graphql' {
   const defaultDocument: DocumentNode;
   export const getArticles: DocumentNode;
   export const getArticle: DocumentNode;
-  export const createArticle: DocumentNode;
-  export const updateArticle: DocumentNode;
+  export const upsertArticle: DocumentNode;
   export const deleteArticle: DocumentNode;
   export const ArticleFragment: DocumentNode;
 
@@ -32,7 +31,13 @@ export const ArticleFragment = gql`
     id
     name
     quantity
-    price
+    prices {
+      price
+      stores {
+        id
+        name
+      }
+    }
     stores {
       id
       name
@@ -62,46 +67,44 @@ export const GetArticle = gql`
   }
   ${ArticleFragment}
 `;
-export const CreateArticle = gql`
-  mutation createArticle(
+export const UpsertArticle = gql`
+  mutation upsertArticle(
     $name: String!
     $unit: String!
     $price: Float!
     $quantity: Float!
     $store: ID!
   ) {
-    createArticle(
-      data: {
-        name: $name
-        unit: $unit
-        price: $price
-        quantity: $quantity
-        stores: { connect: { id: $store } }
+    upsertArticle(
+      where: { name: $name }
+      upsert: {
+        create: {
+          name: $name
+          unit: $unit
+          quantity: $quantity
+          stores: { connect: { id: $store } }
+          prices: {
+            create: {
+              price: $price
+              article: { connect: { name: $name } }
+              stores: { connect: { id: $store } }
+            }
+          }
+        }
+        update: {
+          name: $name
+          unit: $unit
+          quantity: $quantity
+          stores: { connect: { where: { id: $store } } }
+          prices: {
+            create: {
+              price: $price
+              article: { connect: { name: $name } }
+              stores: { connect: { id: $store } }
+            }
+          }
+        }
       }
-    ) {
-      ...ArticleFragment
-    }
-  }
-  ${ArticleFragment}
-`;
-export const UpdateArticle = gql`
-  mutation updateArticle(
-    $id: ID!
-    $name: String!
-    $unit: String!
-    $price: Float!
-    $quantity: Float!
-    $store: ID!
-  ) {
-    updateArticle(
-      data: {
-        name: $name
-        unit: $unit
-        price: $price
-        quantity: $quantity
-        stores: { connect: { where: { id: $store } } }
-      }
-      where: { id: $id }
     ) {
       ...ArticleFragment
     }

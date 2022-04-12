@@ -46,7 +46,7 @@ export type Article = Node & {
   /** The unique identifier */
   id: Scalars['ID'];
   name: Scalars['String'];
-  price: Scalars['Float'];
+  prices: Array<Price>;
   /** The time the document was published. Null on documents in draft stage. */
   publishedAt?: Maybe<Scalars['DateTime']>;
   /** User that last published this document */
@@ -77,6 +77,17 @@ export type ArticleHistoryArgs = {
   limit?: Scalars['Int'];
   skip?: Scalars['Int'];
   stageOverride?: InputMaybe<Stage>;
+};
+
+export type ArticlePricesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  locales?: InputMaybe<Array<Locale>>;
+  orderBy?: InputMaybe<PriceOrderByInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<PriceWhereInput>;
 };
 
 export type ArticlePublishedByArgs = {
@@ -128,7 +139,7 @@ export type ArticleConnection = {
 export type ArticleCreateInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   name: Scalars['String'];
-  price: Scalars['Float'];
+  prices?: InputMaybe<PriceCreateManyInlineInput>;
   quantity: Scalars['Float'];
   stores?: InputMaybe<StoreCreateManyInlineInput>;
   unit: Scalars['String'];
@@ -222,21 +233,9 @@ export type ArticleManyWhereInput = {
   name_not_starts_with?: InputMaybe<Scalars['String']>;
   /** All values starting with the given string. */
   name_starts_with?: InputMaybe<Scalars['String']>;
-  price?: InputMaybe<Scalars['Float']>;
-  /** All values greater than the given value. */
-  price_gt?: InputMaybe<Scalars['Float']>;
-  /** All values greater than or equal the given value. */
-  price_gte?: InputMaybe<Scalars['Float']>;
-  /** All values that are contained in given list. */
-  price_in?: InputMaybe<Array<Scalars['Float']>>;
-  /** All values less than the given value. */
-  price_lt?: InputMaybe<Scalars['Float']>;
-  /** All values less than or equal the given value. */
-  price_lte?: InputMaybe<Scalars['Float']>;
-  /** All values that are not equal to given value. */
-  price_not?: InputMaybe<Scalars['Float']>;
-  /** All values that are not contained in given list. */
-  price_not_in?: InputMaybe<Array<Scalars['Float']>>;
+  prices_every?: InputMaybe<PriceWhereInput>;
+  prices_none?: InputMaybe<PriceWhereInput>;
+  prices_some?: InputMaybe<PriceWhereInput>;
   publishedAt?: InputMaybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   publishedAt_gt?: InputMaybe<Scalars['DateTime']>;
@@ -318,8 +317,6 @@ export enum ArticleOrderByInput {
   IdDesc = 'id_DESC',
   NameAsc = 'name_ASC',
   NameDesc = 'name_DESC',
-  PriceAsc = 'price_ASC',
-  PriceDesc = 'price_DESC',
   PublishedAtAsc = 'publishedAt_ASC',
   PublishedAtDesc = 'publishedAt_DESC',
   QuantityAsc = 'quantity_ASC',
@@ -332,7 +329,7 @@ export enum ArticleOrderByInput {
 
 export type ArticleUpdateInput = {
   name?: InputMaybe<Scalars['String']>;
-  price?: InputMaybe<Scalars['Float']>;
+  prices?: InputMaybe<PriceUpdateManyInlineInput>;
   quantity?: InputMaybe<Scalars['Float']>;
   stores?: InputMaybe<StoreUpdateManyInlineInput>;
   unit?: InputMaybe<Scalars['String']>;
@@ -356,8 +353,6 @@ export type ArticleUpdateManyInlineInput = {
 };
 
 export type ArticleUpdateManyInput = {
-  name?: InputMaybe<Scalars['String']>;
-  price?: InputMaybe<Scalars['Float']>;
   quantity?: InputMaybe<Scalars['Float']>;
   unit?: InputMaybe<Scalars['String']>;
 };
@@ -469,21 +464,9 @@ export type ArticleWhereInput = {
   name_not_starts_with?: InputMaybe<Scalars['String']>;
   /** All values starting with the given string. */
   name_starts_with?: InputMaybe<Scalars['String']>;
-  price?: InputMaybe<Scalars['Float']>;
-  /** All values greater than the given value. */
-  price_gt?: InputMaybe<Scalars['Float']>;
-  /** All values greater than or equal the given value. */
-  price_gte?: InputMaybe<Scalars['Float']>;
-  /** All values that are contained in given list. */
-  price_in?: InputMaybe<Array<Scalars['Float']>>;
-  /** All values less than the given value. */
-  price_lt?: InputMaybe<Scalars['Float']>;
-  /** All values less than or equal the given value. */
-  price_lte?: InputMaybe<Scalars['Float']>;
-  /** All values that are not equal to given value. */
-  price_not?: InputMaybe<Scalars['Float']>;
-  /** All values that are not contained in given list. */
-  price_not_in?: InputMaybe<Array<Scalars['Float']>>;
+  prices_every?: InputMaybe<PriceWhereInput>;
+  prices_none?: InputMaybe<PriceWhereInput>;
+  prices_some?: InputMaybe<PriceWhereInput>;
   publishedAt?: InputMaybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   publishedAt_gt?: InputMaybe<Scalars['DateTime']>;
@@ -561,6 +544,7 @@ export type ArticleWhereInput = {
 /** References Article record uniquely */
 export type ArticleWhereUniqueInput = {
   id?: InputMaybe<Scalars['ID']>;
+  name?: InputMaybe<Scalars['String']>;
 };
 
 /** Asset system model */
@@ -1334,6 +1318,8 @@ export type Mutation = {
    * @deprecated Asset mutations will be overhauled soon
    */
   createAsset?: Maybe<Asset>;
+  /** Create one price */
+  createPrice?: Maybe<Price>;
   /** Create one scheduledRelease */
   createScheduledRelease?: Maybe<ScheduledRelease>;
   /** Create one store */
@@ -1357,12 +1343,21 @@ export type Mutation = {
   /** Delete many Asset documents, return deleted documents */
   deleteManyAssetsConnection: AssetConnection;
   /**
+   * Delete many Price documents
+   * @deprecated Please use the new paginated many mutation (deleteManyPricesConnection)
+   */
+  deleteManyPrices: BatchPayload;
+  /** Delete many Price documents, return deleted documents */
+  deleteManyPricesConnection: PriceConnection;
+  /**
    * Delete many Store documents
    * @deprecated Please use the new paginated many mutation (deleteManyStoresConnection)
    */
   deleteManyStores: BatchPayload;
   /** Delete many Store documents, return deleted documents */
   deleteManyStoresConnection: StoreConnection;
+  /** Delete one price from _all_ existing stages. Returns deleted document. */
+  deletePrice?: Maybe<Price>;
   /** Delete and return scheduled operation */
   deleteScheduledOperation?: Maybe<ScheduledOperation>;
   /** Delete one scheduledRelease from _all_ existing stages. Returns deleted document. */
@@ -1388,24 +1383,37 @@ export type Mutation = {
   /** Publish many Asset documents */
   publishManyAssetsConnection: AssetConnection;
   /**
+   * Publish many Price documents
+   * @deprecated Please use the new paginated many mutation (publishManyPricesConnection)
+   */
+  publishManyPrices: BatchPayload;
+  /** Publish many Price documents */
+  publishManyPricesConnection: PriceConnection;
+  /**
    * Publish many Store documents
    * @deprecated Please use the new paginated many mutation (publishManyStoresConnection)
    */
   publishManyStores: BatchPayload;
   /** Publish many Store documents */
   publishManyStoresConnection: StoreConnection;
+  /** Publish one price */
+  publishPrice?: Maybe<Price>;
   /** Publish one store */
   publishStore?: Maybe<Store>;
   /** Schedule to publish one article */
   schedulePublishArticle?: Maybe<Article>;
   /** Schedule to publish one asset */
   schedulePublishAsset?: Maybe<Asset>;
+  /** Schedule to publish one price */
+  schedulePublishPrice?: Maybe<Price>;
   /** Schedule to publish one store */
   schedulePublishStore?: Maybe<Store>;
   /** Unpublish one article from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only. */
   scheduleUnpublishArticle?: Maybe<Article>;
   /** Unpublish one asset from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only. */
   scheduleUnpublishAsset?: Maybe<Asset>;
+  /** Unpublish one price from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only. */
+  scheduleUnpublishPrice?: Maybe<Price>;
   /** Unpublish one store from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only. */
   scheduleUnpublishStore?: Maybe<Store>;
   /** Unpublish one article from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only. */
@@ -1427,12 +1435,21 @@ export type Mutation = {
   /** Find many Asset documents that match criteria in specified stage and unpublish from target stages */
   unpublishManyAssetsConnection: AssetConnection;
   /**
+   * Unpublish many Price documents
+   * @deprecated Please use the new paginated many mutation (unpublishManyPricesConnection)
+   */
+  unpublishManyPrices: BatchPayload;
+  /** Find many Price documents that match criteria in specified stage and unpublish from target stages */
+  unpublishManyPricesConnection: PriceConnection;
+  /**
    * Unpublish many Store documents
    * @deprecated Please use the new paginated many mutation (unpublishManyStoresConnection)
    */
   unpublishManyStores: BatchPayload;
   /** Find many Store documents that match criteria in specified stage and unpublish from target stages */
   unpublishManyStoresConnection: StoreConnection;
+  /** Unpublish one price from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only. */
+  unpublishPrice?: Maybe<Price>;
   /** Unpublish one store from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only. */
   unpublishStore?: Maybe<Store>;
   /** Update one article */
@@ -1454,12 +1471,21 @@ export type Mutation = {
   /** Update many Asset documents */
   updateManyAssetsConnection: AssetConnection;
   /**
+   * Update many prices
+   * @deprecated Please use the new paginated many mutation (updateManyPricesConnection)
+   */
+  updateManyPrices: BatchPayload;
+  /** Update many Price documents */
+  updateManyPricesConnection: PriceConnection;
+  /**
    * Update many stores
    * @deprecated Please use the new paginated many mutation (updateManyStoresConnection)
    */
   updateManyStores: BatchPayload;
   /** Update many Store documents */
   updateManyStoresConnection: StoreConnection;
+  /** Update one price */
+  updatePrice?: Maybe<Price>;
   /** Update one scheduledRelease */
   updateScheduledRelease?: Maybe<ScheduledRelease>;
   /** Update one store */
@@ -1468,6 +1494,8 @@ export type Mutation = {
   upsertArticle?: Maybe<Article>;
   /** Upsert one asset */
   upsertAsset?: Maybe<Asset>;
+  /** Upsert one price */
+  upsertPrice?: Maybe<Price>;
   /** Upsert one store */
   upsertStore?: Maybe<Store>;
 };
@@ -1478,6 +1506,10 @@ export type MutationCreateArticleArgs = {
 
 export type MutationCreateAssetArgs = {
   data: AssetCreateInput;
+};
+
+export type MutationCreatePriceArgs = {
+  data: PriceCreateInput;
 };
 
 export type MutationCreateScheduledReleaseArgs = {
@@ -1522,6 +1554,19 @@ export type MutationDeleteManyAssetsConnectionArgs = {
   where?: InputMaybe<AssetManyWhereInput>;
 };
 
+export type MutationDeleteManyPricesArgs = {
+  where?: InputMaybe<PriceManyWhereInput>;
+};
+
+export type MutationDeleteManyPricesConnectionArgs = {
+  after?: InputMaybe<Scalars['ID']>;
+  before?: InputMaybe<Scalars['ID']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<PriceManyWhereInput>;
+};
+
 export type MutationDeleteManyStoresArgs = {
   where?: InputMaybe<StoreManyWhereInput>;
 };
@@ -1533,6 +1578,10 @@ export type MutationDeleteManyStoresConnectionArgs = {
   last?: InputMaybe<Scalars['Int']>;
   skip?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<StoreManyWhereInput>;
+};
+
+export type MutationDeletePriceArgs = {
+  where: PriceWhereUniqueInput;
 };
 
 export type MutationDeleteScheduledOperationArgs = {
@@ -1598,6 +1647,22 @@ export type MutationPublishManyAssetsConnectionArgs = {
   withDefaultLocale?: InputMaybe<Scalars['Boolean']>;
 };
 
+export type MutationPublishManyPricesArgs = {
+  to?: Array<Stage>;
+  where?: InputMaybe<PriceManyWhereInput>;
+};
+
+export type MutationPublishManyPricesConnectionArgs = {
+  after?: InputMaybe<Scalars['ID']>;
+  before?: InputMaybe<Scalars['ID']>;
+  first?: InputMaybe<Scalars['Int']>;
+  from?: InputMaybe<Stage>;
+  last?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  to?: Array<Stage>;
+  where?: InputMaybe<PriceManyWhereInput>;
+};
+
 export type MutationPublishManyStoresArgs = {
   to?: Array<Stage>;
   where?: InputMaybe<StoreManyWhereInput>;
@@ -1612,6 +1677,11 @@ export type MutationPublishManyStoresConnectionArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   to?: Array<Stage>;
   where?: InputMaybe<StoreManyWhereInput>;
+};
+
+export type MutationPublishPriceArgs = {
+  to?: Array<Stage>;
+  where: PriceWhereUniqueInput;
 };
 
 export type MutationPublishStoreArgs = {
@@ -1636,6 +1706,13 @@ export type MutationSchedulePublishAssetArgs = {
   withDefaultLocale?: InputMaybe<Scalars['Boolean']>;
 };
 
+export type MutationSchedulePublishPriceArgs = {
+  releaseAt?: InputMaybe<Scalars['DateTime']>;
+  releaseId?: InputMaybe<Scalars['String']>;
+  to?: Array<Stage>;
+  where: PriceWhereUniqueInput;
+};
+
 export type MutationSchedulePublishStoreArgs = {
   releaseAt?: InputMaybe<Scalars['DateTime']>;
   releaseId?: InputMaybe<Scalars['String']>;
@@ -1657,6 +1734,13 @@ export type MutationScheduleUnpublishAssetArgs = {
   releaseId?: InputMaybe<Scalars['String']>;
   unpublishBase?: InputMaybe<Scalars['Boolean']>;
   where: AssetWhereUniqueInput;
+};
+
+export type MutationScheduleUnpublishPriceArgs = {
+  from?: Array<Stage>;
+  releaseAt?: InputMaybe<Scalars['DateTime']>;
+  releaseId?: InputMaybe<Scalars['String']>;
+  where: PriceWhereUniqueInput;
 };
 
 export type MutationScheduleUnpublishStoreArgs = {
@@ -1714,6 +1798,22 @@ export type MutationUnpublishManyAssetsConnectionArgs = {
   where?: InputMaybe<AssetManyWhereInput>;
 };
 
+export type MutationUnpublishManyPricesArgs = {
+  from?: Array<Stage>;
+  where?: InputMaybe<PriceManyWhereInput>;
+};
+
+export type MutationUnpublishManyPricesConnectionArgs = {
+  after?: InputMaybe<Scalars['ID']>;
+  before?: InputMaybe<Scalars['ID']>;
+  first?: InputMaybe<Scalars['Int']>;
+  from?: Array<Stage>;
+  last?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  stage?: InputMaybe<Stage>;
+  where?: InputMaybe<PriceManyWhereInput>;
+};
+
 export type MutationUnpublishManyStoresArgs = {
   from?: Array<Stage>;
   where?: InputMaybe<StoreManyWhereInput>;
@@ -1728,6 +1828,11 @@ export type MutationUnpublishManyStoresConnectionArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   stage?: InputMaybe<Stage>;
   where?: InputMaybe<StoreManyWhereInput>;
+};
+
+export type MutationUnpublishPriceArgs = {
+  from?: Array<Stage>;
+  where: PriceWhereUniqueInput;
 };
 
 export type MutationUnpublishStoreArgs = {
@@ -1775,6 +1880,21 @@ export type MutationUpdateManyAssetsConnectionArgs = {
   where?: InputMaybe<AssetManyWhereInput>;
 };
 
+export type MutationUpdateManyPricesArgs = {
+  data: PriceUpdateManyInput;
+  where?: InputMaybe<PriceManyWhereInput>;
+};
+
+export type MutationUpdateManyPricesConnectionArgs = {
+  after?: InputMaybe<Scalars['ID']>;
+  before?: InputMaybe<Scalars['ID']>;
+  data: PriceUpdateManyInput;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<PriceManyWhereInput>;
+};
+
 export type MutationUpdateManyStoresArgs = {
   data: StoreUpdateManyInput;
   where?: InputMaybe<StoreManyWhereInput>;
@@ -1788,6 +1908,11 @@ export type MutationUpdateManyStoresConnectionArgs = {
   last?: InputMaybe<Scalars['Int']>;
   skip?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<StoreManyWhereInput>;
+};
+
+export type MutationUpdatePriceArgs = {
+  data: PriceUpdateInput;
+  where: PriceWhereUniqueInput;
 };
 
 export type MutationUpdateScheduledReleaseArgs = {
@@ -1808,6 +1933,11 @@ export type MutationUpsertArticleArgs = {
 export type MutationUpsertAssetArgs = {
   upsert: AssetUpsertInput;
   where: AssetWhereUniqueInput;
+};
+
+export type MutationUpsertPriceArgs = {
+  upsert: PriceUpsertInput;
+  where: PriceWhereUniqueInput;
 };
 
 export type MutationUpsertStoreArgs = {
@@ -1838,6 +1968,421 @@ export type PageInfo = {
   startCursor?: Maybe<Scalars['String']>;
 };
 
+export type Price = Node & {
+  __typename?: 'Price';
+  article?: Maybe<Article>;
+  /** The time the document was created */
+  createdAt: Scalars['DateTime'];
+  /** User that created this document */
+  createdBy?: Maybe<User>;
+  /** Get the document in other stages */
+  documentInStages: Array<Price>;
+  /** List of Price versions */
+  history: Array<Version>;
+  /** The unique identifier */
+  id: Scalars['ID'];
+  price: Scalars['Float'];
+  /** The time the document was published. Null on documents in draft stage. */
+  publishedAt?: Maybe<Scalars['DateTime']>;
+  /** User that last published this document */
+  publishedBy?: Maybe<User>;
+  scheduledIn: Array<ScheduledOperation>;
+  /** System stage field */
+  stage: Stage;
+  stores: Array<Store>;
+  /** The time the document was updated */
+  updatedAt: Scalars['DateTime'];
+  /** User that last updated this document */
+  updatedBy?: Maybe<User>;
+};
+
+export type PriceArticleArgs = {
+  locales?: InputMaybe<Array<Locale>>;
+};
+
+export type PriceCreatedByArgs = {
+  locales?: InputMaybe<Array<Locale>>;
+};
+
+export type PriceDocumentInStagesArgs = {
+  includeCurrent?: Scalars['Boolean'];
+  inheritLocale?: Scalars['Boolean'];
+  stages?: Array<Stage>;
+};
+
+export type PriceHistoryArgs = {
+  limit?: Scalars['Int'];
+  skip?: Scalars['Int'];
+  stageOverride?: InputMaybe<Stage>;
+};
+
+export type PricePublishedByArgs = {
+  locales?: InputMaybe<Array<Locale>>;
+};
+
+export type PriceScheduledInArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  locales?: InputMaybe<Array<Locale>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<ScheduledOperationWhereInput>;
+};
+
+export type PriceStoresArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  locales?: InputMaybe<Array<Locale>>;
+  orderBy?: InputMaybe<StoreOrderByInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<StoreWhereInput>;
+};
+
+export type PriceUpdatedByArgs = {
+  locales?: InputMaybe<Array<Locale>>;
+};
+
+export type PriceConnectInput = {
+  /** Allow to specify document position in list of connected documents, will default to appending at end of list */
+  position?: InputMaybe<ConnectPositionInput>;
+  /** Document to connect */
+  where: PriceWhereUniqueInput;
+};
+
+/** A connection to a list of items. */
+export type PriceConnection = {
+  __typename?: 'PriceConnection';
+  aggregate: Aggregate;
+  /** A list of edges. */
+  edges: Array<PriceEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+export type PriceCreateInput = {
+  article?: InputMaybe<ArticleCreateOneInlineInput>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  price: Scalars['Float'];
+  stores?: InputMaybe<StoreCreateManyInlineInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type PriceCreateManyInlineInput = {
+  /** Connect multiple existing Price documents */
+  connect?: InputMaybe<Array<PriceWhereUniqueInput>>;
+  /** Create and connect multiple existing Price documents */
+  create?: InputMaybe<Array<PriceCreateInput>>;
+};
+
+export type PriceCreateOneInlineInput = {
+  /** Connect one existing Price document */
+  connect?: InputMaybe<PriceWhereUniqueInput>;
+  /** Create and connect one Price document */
+  create?: InputMaybe<PriceCreateInput>;
+};
+
+/** An edge in a connection. */
+export type PriceEdge = {
+  __typename?: 'PriceEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge. */
+  node: Price;
+};
+
+/** Identifies documents */
+export type PriceManyWhereInput = {
+  /** Logical AND on all given filters. */
+  AND?: InputMaybe<Array<PriceWhereInput>>;
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: InputMaybe<Array<PriceWhereInput>>;
+  /** Logical OR on all given filters. */
+  OR?: InputMaybe<Array<PriceWhereInput>>;
+  /** Contains search across all appropriate fields. */
+  _search?: InputMaybe<Scalars['String']>;
+  article?: InputMaybe<ArticleWhereInput>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  /** All values greater than the given value. */
+  createdAt_gt?: InputMaybe<Scalars['DateTime']>;
+  /** All values greater than or equal the given value. */
+  createdAt_gte?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are contained in given list. */
+  createdAt_in?: InputMaybe<Array<Scalars['DateTime']>>;
+  /** All values less than the given value. */
+  createdAt_lt?: InputMaybe<Scalars['DateTime']>;
+  /** All values less than or equal the given value. */
+  createdAt_lte?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are not equal to given value. */
+  createdAt_not?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are not contained in given list. */
+  createdAt_not_in?: InputMaybe<Array<Scalars['DateTime']>>;
+  createdBy?: InputMaybe<UserWhereInput>;
+  id?: InputMaybe<Scalars['ID']>;
+  /** All values containing the given string. */
+  id_contains?: InputMaybe<Scalars['ID']>;
+  /** All values ending with the given string. */
+  id_ends_with?: InputMaybe<Scalars['ID']>;
+  /** All values that are contained in given list. */
+  id_in?: InputMaybe<Array<Scalars['ID']>>;
+  /** All values that are not equal to given value. */
+  id_not?: InputMaybe<Scalars['ID']>;
+  /** All values not containing the given string. */
+  id_not_contains?: InputMaybe<Scalars['ID']>;
+  /** All values not ending with the given string */
+  id_not_ends_with?: InputMaybe<Scalars['ID']>;
+  /** All values that are not contained in given list. */
+  id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  /** All values not starting with the given string. */
+  id_not_starts_with?: InputMaybe<Scalars['ID']>;
+  /** All values starting with the given string. */
+  id_starts_with?: InputMaybe<Scalars['ID']>;
+  price?: InputMaybe<Scalars['Float']>;
+  /** All values greater than the given value. */
+  price_gt?: InputMaybe<Scalars['Float']>;
+  /** All values greater than or equal the given value. */
+  price_gte?: InputMaybe<Scalars['Float']>;
+  /** All values that are contained in given list. */
+  price_in?: InputMaybe<Array<Scalars['Float']>>;
+  /** All values less than the given value. */
+  price_lt?: InputMaybe<Scalars['Float']>;
+  /** All values less than or equal the given value. */
+  price_lte?: InputMaybe<Scalars['Float']>;
+  /** All values that are not equal to given value. */
+  price_not?: InputMaybe<Scalars['Float']>;
+  /** All values that are not contained in given list. */
+  price_not_in?: InputMaybe<Array<Scalars['Float']>>;
+  publishedAt?: InputMaybe<Scalars['DateTime']>;
+  /** All values greater than the given value. */
+  publishedAt_gt?: InputMaybe<Scalars['DateTime']>;
+  /** All values greater than or equal the given value. */
+  publishedAt_gte?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are contained in given list. */
+  publishedAt_in?: InputMaybe<Array<Scalars['DateTime']>>;
+  /** All values less than the given value. */
+  publishedAt_lt?: InputMaybe<Scalars['DateTime']>;
+  /** All values less than or equal the given value. */
+  publishedAt_lte?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are not equal to given value. */
+  publishedAt_not?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are not contained in given list. */
+  publishedAt_not_in?: InputMaybe<Array<Scalars['DateTime']>>;
+  publishedBy?: InputMaybe<UserWhereInput>;
+  scheduledIn_every?: InputMaybe<ScheduledOperationWhereInput>;
+  scheduledIn_none?: InputMaybe<ScheduledOperationWhereInput>;
+  scheduledIn_some?: InputMaybe<ScheduledOperationWhereInput>;
+  stores_every?: InputMaybe<StoreWhereInput>;
+  stores_none?: InputMaybe<StoreWhereInput>;
+  stores_some?: InputMaybe<StoreWhereInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  /** All values greater than the given value. */
+  updatedAt_gt?: InputMaybe<Scalars['DateTime']>;
+  /** All values greater than or equal the given value. */
+  updatedAt_gte?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are contained in given list. */
+  updatedAt_in?: InputMaybe<Array<Scalars['DateTime']>>;
+  /** All values less than the given value. */
+  updatedAt_lt?: InputMaybe<Scalars['DateTime']>;
+  /** All values less than or equal the given value. */
+  updatedAt_lte?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are not equal to given value. */
+  updatedAt_not?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are not contained in given list. */
+  updatedAt_not_in?: InputMaybe<Array<Scalars['DateTime']>>;
+  updatedBy?: InputMaybe<UserWhereInput>;
+};
+
+export enum PriceOrderByInput {
+  CreatedAtAsc = 'createdAt_ASC',
+  CreatedAtDesc = 'createdAt_DESC',
+  IdAsc = 'id_ASC',
+  IdDesc = 'id_DESC',
+  PriceAsc = 'price_ASC',
+  PriceDesc = 'price_DESC',
+  PublishedAtAsc = 'publishedAt_ASC',
+  PublishedAtDesc = 'publishedAt_DESC',
+  UpdatedAtAsc = 'updatedAt_ASC',
+  UpdatedAtDesc = 'updatedAt_DESC',
+}
+
+export type PriceUpdateInput = {
+  article?: InputMaybe<ArticleUpdateOneInlineInput>;
+  price?: InputMaybe<Scalars['Float']>;
+  stores?: InputMaybe<StoreUpdateManyInlineInput>;
+};
+
+export type PriceUpdateManyInlineInput = {
+  /** Connect multiple existing Price documents */
+  connect?: InputMaybe<Array<PriceConnectInput>>;
+  /** Create and connect multiple Price documents */
+  create?: InputMaybe<Array<PriceCreateInput>>;
+  /** Delete multiple Price documents */
+  delete?: InputMaybe<Array<PriceWhereUniqueInput>>;
+  /** Disconnect multiple Price documents */
+  disconnect?: InputMaybe<Array<PriceWhereUniqueInput>>;
+  /** Override currently-connected documents with multiple existing Price documents */
+  set?: InputMaybe<Array<PriceWhereUniqueInput>>;
+  /** Update multiple Price documents */
+  update?: InputMaybe<Array<PriceUpdateWithNestedWhereUniqueInput>>;
+  /** Upsert multiple Price documents */
+  upsert?: InputMaybe<Array<PriceUpsertWithNestedWhereUniqueInput>>;
+};
+
+export type PriceUpdateManyInput = {
+  price?: InputMaybe<Scalars['Float']>;
+};
+
+export type PriceUpdateManyWithNestedWhereInput = {
+  /** Update many input */
+  data: PriceUpdateManyInput;
+  /** Document search */
+  where: PriceWhereInput;
+};
+
+export type PriceUpdateOneInlineInput = {
+  /** Connect existing Price document */
+  connect?: InputMaybe<PriceWhereUniqueInput>;
+  /** Create and connect one Price document */
+  create?: InputMaybe<PriceCreateInput>;
+  /** Delete currently connected Price document */
+  delete?: InputMaybe<Scalars['Boolean']>;
+  /** Disconnect currently connected Price document */
+  disconnect?: InputMaybe<Scalars['Boolean']>;
+  /** Update single Price document */
+  update?: InputMaybe<PriceUpdateWithNestedWhereUniqueInput>;
+  /** Upsert single Price document */
+  upsert?: InputMaybe<PriceUpsertWithNestedWhereUniqueInput>;
+};
+
+export type PriceUpdateWithNestedWhereUniqueInput = {
+  /** Document to update */
+  data: PriceUpdateInput;
+  /** Unique document search */
+  where: PriceWhereUniqueInput;
+};
+
+export type PriceUpsertInput = {
+  /** Create document if it didn't exist */
+  create: PriceCreateInput;
+  /** Update document if it exists */
+  update: PriceUpdateInput;
+};
+
+export type PriceUpsertWithNestedWhereUniqueInput = {
+  /** Upsert data */
+  data: PriceUpsertInput;
+  /** Unique document search */
+  where: PriceWhereUniqueInput;
+};
+
+/** Identifies documents */
+export type PriceWhereInput = {
+  /** Logical AND on all given filters. */
+  AND?: InputMaybe<Array<PriceWhereInput>>;
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: InputMaybe<Array<PriceWhereInput>>;
+  /** Logical OR on all given filters. */
+  OR?: InputMaybe<Array<PriceWhereInput>>;
+  /** Contains search across all appropriate fields. */
+  _search?: InputMaybe<Scalars['String']>;
+  article?: InputMaybe<ArticleWhereInput>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  /** All values greater than the given value. */
+  createdAt_gt?: InputMaybe<Scalars['DateTime']>;
+  /** All values greater than or equal the given value. */
+  createdAt_gte?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are contained in given list. */
+  createdAt_in?: InputMaybe<Array<Scalars['DateTime']>>;
+  /** All values less than the given value. */
+  createdAt_lt?: InputMaybe<Scalars['DateTime']>;
+  /** All values less than or equal the given value. */
+  createdAt_lte?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are not equal to given value. */
+  createdAt_not?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are not contained in given list. */
+  createdAt_not_in?: InputMaybe<Array<Scalars['DateTime']>>;
+  createdBy?: InputMaybe<UserWhereInput>;
+  id?: InputMaybe<Scalars['ID']>;
+  /** All values containing the given string. */
+  id_contains?: InputMaybe<Scalars['ID']>;
+  /** All values ending with the given string. */
+  id_ends_with?: InputMaybe<Scalars['ID']>;
+  /** All values that are contained in given list. */
+  id_in?: InputMaybe<Array<Scalars['ID']>>;
+  /** All values that are not equal to given value. */
+  id_not?: InputMaybe<Scalars['ID']>;
+  /** All values not containing the given string. */
+  id_not_contains?: InputMaybe<Scalars['ID']>;
+  /** All values not ending with the given string */
+  id_not_ends_with?: InputMaybe<Scalars['ID']>;
+  /** All values that are not contained in given list. */
+  id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  /** All values not starting with the given string. */
+  id_not_starts_with?: InputMaybe<Scalars['ID']>;
+  /** All values starting with the given string. */
+  id_starts_with?: InputMaybe<Scalars['ID']>;
+  price?: InputMaybe<Scalars['Float']>;
+  /** All values greater than the given value. */
+  price_gt?: InputMaybe<Scalars['Float']>;
+  /** All values greater than or equal the given value. */
+  price_gte?: InputMaybe<Scalars['Float']>;
+  /** All values that are contained in given list. */
+  price_in?: InputMaybe<Array<Scalars['Float']>>;
+  /** All values less than the given value. */
+  price_lt?: InputMaybe<Scalars['Float']>;
+  /** All values less than or equal the given value. */
+  price_lte?: InputMaybe<Scalars['Float']>;
+  /** All values that are not equal to given value. */
+  price_not?: InputMaybe<Scalars['Float']>;
+  /** All values that are not contained in given list. */
+  price_not_in?: InputMaybe<Array<Scalars['Float']>>;
+  publishedAt?: InputMaybe<Scalars['DateTime']>;
+  /** All values greater than the given value. */
+  publishedAt_gt?: InputMaybe<Scalars['DateTime']>;
+  /** All values greater than or equal the given value. */
+  publishedAt_gte?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are contained in given list. */
+  publishedAt_in?: InputMaybe<Array<Scalars['DateTime']>>;
+  /** All values less than the given value. */
+  publishedAt_lt?: InputMaybe<Scalars['DateTime']>;
+  /** All values less than or equal the given value. */
+  publishedAt_lte?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are not equal to given value. */
+  publishedAt_not?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are not contained in given list. */
+  publishedAt_not_in?: InputMaybe<Array<Scalars['DateTime']>>;
+  publishedBy?: InputMaybe<UserWhereInput>;
+  scheduledIn_every?: InputMaybe<ScheduledOperationWhereInput>;
+  scheduledIn_none?: InputMaybe<ScheduledOperationWhereInput>;
+  scheduledIn_some?: InputMaybe<ScheduledOperationWhereInput>;
+  stores_every?: InputMaybe<StoreWhereInput>;
+  stores_none?: InputMaybe<StoreWhereInput>;
+  stores_some?: InputMaybe<StoreWhereInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  /** All values greater than the given value. */
+  updatedAt_gt?: InputMaybe<Scalars['DateTime']>;
+  /** All values greater than or equal the given value. */
+  updatedAt_gte?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are contained in given list. */
+  updatedAt_in?: InputMaybe<Array<Scalars['DateTime']>>;
+  /** All values less than the given value. */
+  updatedAt_lt?: InputMaybe<Scalars['DateTime']>;
+  /** All values less than or equal the given value. */
+  updatedAt_lte?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are not equal to given value. */
+  updatedAt_not?: InputMaybe<Scalars['DateTime']>;
+  /** All values that are not contained in given list. */
+  updatedAt_not_in?: InputMaybe<Array<Scalars['DateTime']>>;
+  updatedBy?: InputMaybe<UserWhereInput>;
+};
+
+/** References Price record uniquely */
+export type PriceWhereUniqueInput = {
+  id?: InputMaybe<Scalars['ID']>;
+};
+
 export type PublishLocaleInput = {
   /** Locales to publish */
   locale: Locale;
@@ -1865,6 +2410,14 @@ export type Query = {
   assetsConnection: AssetConnection;
   /** Fetches an object given its ID */
   node?: Maybe<Node>;
+  /** Retrieve a single price */
+  price?: Maybe<Price>;
+  /** Retrieve document version */
+  priceVersion?: Maybe<DocumentVersion>;
+  /** Retrieve multiple prices */
+  prices: Array<Price>;
+  /** Retrieve multiple prices using the Relay connection interface */
+  pricesConnection: PriceConnection;
   /** Retrieve a single scheduledOperation */
   scheduledOperation?: Maybe<ScheduledOperation>;
   /** Retrieve multiple scheduledOperations */
@@ -1965,6 +2518,40 @@ export type QueryNodeArgs = {
   id: Scalars['ID'];
   locales?: Array<Locale>;
   stage?: Stage;
+};
+
+export type QueryPriceArgs = {
+  locales?: Array<Locale>;
+  stage?: Stage;
+  where: PriceWhereUniqueInput;
+};
+
+export type QueryPriceVersionArgs = {
+  where: VersionWhereInput;
+};
+
+export type QueryPricesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  locales?: Array<Locale>;
+  orderBy?: InputMaybe<PriceOrderByInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  stage?: Stage;
+  where?: InputMaybe<PriceWhereInput>;
+};
+
+export type QueryPricesConnectionArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  locales?: Array<Locale>;
+  orderBy?: InputMaybe<PriceOrderByInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  stage?: Stage;
+  where?: InputMaybe<PriceWhereInput>;
 };
 
 export type QueryScheduledOperationArgs = {
@@ -2192,7 +2779,7 @@ export type ScheduledOperationUpdatedByArgs = {
   locales?: InputMaybe<Array<Locale>>;
 };
 
-export type ScheduledOperationAffectedDocument = Article | Asset | Store;
+export type ScheduledOperationAffectedDocument = Article | Asset | Price | Store;
 
 export type ScheduledOperationConnectInput = {
   /** Allow to specify document position in list of connected documents, will default to appending at end of list */
@@ -3121,6 +3708,7 @@ export type Store = Node & {
   id: Scalars['ID'];
   location?: Maybe<Scalars['String']>;
   name: Scalars['String'];
+  price?: Maybe<Price>;
   /** The time the document was published. Null on documents in draft stage. */
   publishedAt?: Maybe<Scalars['DateTime']>;
   /** User that last published this document */
@@ -3159,6 +3747,10 @@ export type StoreHistoryArgs = {
   limit?: Scalars['Int'];
   skip?: Scalars['Int'];
   stageOverride?: InputMaybe<Stage>;
+};
+
+export type StorePriceArgs = {
+  locales?: InputMaybe<Array<Locale>>;
 };
 
 export type StorePublishedByArgs = {
@@ -3201,6 +3793,7 @@ export type StoreCreateInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   location?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
+  price?: InputMaybe<PriceCreateOneInlineInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
@@ -3313,6 +3906,7 @@ export type StoreManyWhereInput = {
   name_not_starts_with?: InputMaybe<Scalars['String']>;
   /** All values starting with the given string. */
   name_starts_with?: InputMaybe<Scalars['String']>;
+  price?: InputMaybe<PriceWhereInput>;
   publishedAt?: InputMaybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   publishedAt_gt?: InputMaybe<Scalars['DateTime']>;
@@ -3369,6 +3963,7 @@ export type StoreUpdateInput = {
   articles?: InputMaybe<ArticleUpdateManyInlineInput>;
   location?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
+  price?: InputMaybe<PriceUpdateOneInlineInput>;
 };
 
 export type StoreUpdateManyInlineInput = {
@@ -3522,6 +4117,7 @@ export type StoreWhereInput = {
   name_not_starts_with?: InputMaybe<Scalars['String']>;
   /** All values starting with the given string. */
   name_starts_with?: InputMaybe<Scalars['String']>;
+  price?: InputMaybe<PriceWhereInput>;
   publishedAt?: InputMaybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   publishedAt_gt?: InputMaybe<Scalars['DateTime']>;
@@ -4043,7 +4639,11 @@ export type GetArticlesQuery = {
     id: string;
     name: string;
     quantity: number;
-    price: number;
+    prices: Array<{
+      __typename?: 'Price';
+      price: number;
+      stores: Array<{ __typename?: 'Store'; id: string; name: string }>;
+    }>;
     stores: Array<{ __typename?: 'Store'; id: string; name: string }>;
   }>;
 };
@@ -4059,12 +4659,16 @@ export type GetArticleQuery = {
     id: string;
     name: string;
     quantity: number;
-    price: number;
+    prices: Array<{
+      __typename?: 'Price';
+      price: number;
+      stores: Array<{ __typename?: 'Store'; id: string; name: string }>;
+    }>;
     stores: Array<{ __typename?: 'Store'; id: string; name: string }>;
   } | null;
 };
 
-export type CreateArticleMutationVariables = Exact<{
+export type UpsertArticleMutationVariables = Exact<{
   name: Scalars['String'];
   unit: Scalars['String'];
   price: Scalars['Float'];
@@ -4072,35 +4676,18 @@ export type CreateArticleMutationVariables = Exact<{
   store: Scalars['ID'];
 }>;
 
-export type CreateArticleMutation = {
+export type UpsertArticleMutation = {
   __typename?: 'Mutation';
-  createArticle?: {
+  upsertArticle?: {
     __typename?: 'Article';
     id: string;
     name: string;
     quantity: number;
-    price: number;
-    stores: Array<{ __typename?: 'Store'; id: string; name: string }>;
-  } | null;
-};
-
-export type UpdateArticleMutationVariables = Exact<{
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  unit: Scalars['String'];
-  price: Scalars['Float'];
-  quantity: Scalars['Float'];
-  store: Scalars['ID'];
-}>;
-
-export type UpdateArticleMutation = {
-  __typename?: 'Mutation';
-  updateArticle?: {
-    __typename?: 'Article';
-    id: string;
-    name: string;
-    quantity: number;
-    price: number;
+    prices: Array<{
+      __typename?: 'Price';
+      price: number;
+      stores: Array<{ __typename?: 'Store'; id: string; name: string }>;
+    }>;
     stores: Array<{ __typename?: 'Store'; id: string; name: string }>;
   } | null;
 };
@@ -4119,7 +4706,11 @@ export type ArticleFragmentFragment = {
   id: string;
   name: string;
   quantity: number;
-  price: number;
+  prices: Array<{
+    __typename?: 'Price';
+    price: number;
+    stores: Array<{ __typename?: 'Store'; id: string; name: string }>;
+  }>;
   stores: Array<{ __typename?: 'Store'; id: string; name: string }>;
 };
 
@@ -4181,7 +4772,13 @@ export const ArticleFragmentFragmentDoc = gql`
     id
     name
     quantity
-    price
+    prices {
+      price
+      stores {
+        id
+        name
+      }
+    }
     stores {
       id
       name
@@ -4283,21 +4880,43 @@ export function useGetArticleLazyQuery(
 export type GetArticleQueryHookResult = ReturnType<typeof useGetArticleQuery>;
 export type GetArticleLazyQueryHookResult = ReturnType<typeof useGetArticleLazyQuery>;
 export type GetArticleQueryResult = Apollo.QueryResult<GetArticleQuery, GetArticleQueryVariables>;
-export const CreateArticleDocument = gql`
-  mutation createArticle(
+export const UpsertArticleDocument = gql`
+  mutation upsertArticle(
     $name: String!
     $unit: String!
     $price: Float!
     $quantity: Float!
     $store: ID!
   ) {
-    createArticle(
-      data: {
-        name: $name
-        unit: $unit
-        price: $price
-        quantity: $quantity
-        stores: { connect: { id: $store } }
+    upsertArticle(
+      where: { name: $name }
+      upsert: {
+        create: {
+          name: $name
+          unit: $unit
+          quantity: $quantity
+          stores: { connect: { id: $store } }
+          prices: {
+            create: {
+              price: $price
+              article: { connect: { name: $name } }
+              stores: { connect: { id: $store } }
+            }
+          }
+        }
+        update: {
+          name: $name
+          unit: $unit
+          quantity: $quantity
+          stores: { connect: { where: { id: $store } } }
+          prices: {
+            create: {
+              price: $price
+              article: { connect: { name: $name } }
+              stores: { connect: { id: $store } }
+            }
+          }
+        }
       }
     ) {
       ...ArticleFragment
@@ -4305,23 +4924,23 @@ export const CreateArticleDocument = gql`
   }
   ${ArticleFragmentFragmentDoc}
 `;
-export type CreateArticleMutationFn = Apollo.MutationFunction<
-  CreateArticleMutation,
-  CreateArticleMutationVariables
+export type UpsertArticleMutationFn = Apollo.MutationFunction<
+  UpsertArticleMutation,
+  UpsertArticleMutationVariables
 >;
 
 /**
- * __useCreateArticleMutation__
+ * __useUpsertArticleMutation__
  *
- * To run a mutation, you first call `useCreateArticleMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateArticleMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useUpsertArticleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpsertArticleMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createArticleMutation, { data, loading, error }] = useCreateArticleMutation({
+ * const [upsertArticleMutation, { data, loading, error }] = useUpsertArticleMutation({
  *   variables: {
  *      name: // value for 'name'
  *      unit: // value for 'unit'
@@ -4331,86 +4950,20 @@ export type CreateArticleMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useCreateArticleMutation(
-  baseOptions?: Apollo.MutationHookOptions<CreateArticleMutation, CreateArticleMutationVariables>,
+export function useUpsertArticleMutation(
+  baseOptions?: Apollo.MutationHookOptions<UpsertArticleMutation, UpsertArticleMutationVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<CreateArticleMutation, CreateArticleMutationVariables>(
-    CreateArticleDocument,
+  return Apollo.useMutation<UpsertArticleMutation, UpsertArticleMutationVariables>(
+    UpsertArticleDocument,
     options,
   );
 }
-export type CreateArticleMutationHookResult = ReturnType<typeof useCreateArticleMutation>;
-export type CreateArticleMutationResult = Apollo.MutationResult<CreateArticleMutation>;
-export type CreateArticleMutationOptions = Apollo.BaseMutationOptions<
-  CreateArticleMutation,
-  CreateArticleMutationVariables
->;
-export const UpdateArticleDocument = gql`
-  mutation updateArticle(
-    $id: ID!
-    $name: String!
-    $unit: String!
-    $price: Float!
-    $quantity: Float!
-    $store: ID!
-  ) {
-    updateArticle(
-      data: {
-        name: $name
-        unit: $unit
-        price: $price
-        quantity: $quantity
-        stores: { connect: { where: { id: $store } } }
-      }
-      where: { id: $id }
-    ) {
-      ...ArticleFragment
-    }
-  }
-  ${ArticleFragmentFragmentDoc}
-`;
-export type UpdateArticleMutationFn = Apollo.MutationFunction<
-  UpdateArticleMutation,
-  UpdateArticleMutationVariables
->;
-
-/**
- * __useUpdateArticleMutation__
- *
- * To run a mutation, you first call `useUpdateArticleMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateArticleMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateArticleMutation, { data, loading, error }] = useUpdateArticleMutation({
- *   variables: {
- *      id: // value for 'id'
- *      name: // value for 'name'
- *      unit: // value for 'unit'
- *      price: // value for 'price'
- *      quantity: // value for 'quantity'
- *      store: // value for 'store'
- *   },
- * });
- */
-export function useUpdateArticleMutation(
-  baseOptions?: Apollo.MutationHookOptions<UpdateArticleMutation, UpdateArticleMutationVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<UpdateArticleMutation, UpdateArticleMutationVariables>(
-    UpdateArticleDocument,
-    options,
-  );
-}
-export type UpdateArticleMutationHookResult = ReturnType<typeof useUpdateArticleMutation>;
-export type UpdateArticleMutationResult = Apollo.MutationResult<UpdateArticleMutation>;
-export type UpdateArticleMutationOptions = Apollo.BaseMutationOptions<
-  UpdateArticleMutation,
-  UpdateArticleMutationVariables
+export type UpsertArticleMutationHookResult = ReturnType<typeof useUpsertArticleMutation>;
+export type UpsertArticleMutationResult = Apollo.MutationResult<UpsertArticleMutation>;
+export type UpsertArticleMutationOptions = Apollo.BaseMutationOptions<
+  UpsertArticleMutation,
+  UpsertArticleMutationVariables
 >;
 export const DeleteArticleDocument = gql`
   mutation deleteArticle($id: ID!) {
@@ -4683,8 +5236,8 @@ export interface PossibleTypesResultData {
 }
 const result: PossibleTypesResultData = {
   possibleTypes: {
-    Node: ['Article', 'Asset', 'ScheduledOperation', 'ScheduledRelease', 'Store', 'User'],
-    ScheduledOperationAffectedDocument: ['Article', 'Asset', 'Store'],
+    Node: ['Article', 'Asset', 'Price', 'ScheduledOperation', 'ScheduledRelease', 'Store', 'User'],
+    ScheduledOperationAffectedDocument: ['Article', 'Asset', 'Price', 'Store'],
   },
 };
 export default result;

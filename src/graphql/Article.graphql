@@ -10,43 +10,43 @@ query getArticle($id: ID!) {
   }
 }
 
-mutation createArticle(
+mutation upsertArticle(
   $name: String!
   $unit: String!
   $price: Float!
   $quantity: Float!
   $store: ID!
 ) {
-  createArticle(
-    data: {
-      name: $name
-      unit: $unit
-      price: $price
-      quantity: $quantity
-      stores: { connect: { id: $store } }
+  upsertArticle(
+    where: { name: $name }
+    upsert: {
+      create: {
+        name: $name
+        unit: $unit
+        quantity: $quantity
+        stores: { connect: { id: $store } }
+        prices: {
+          create: {
+            price: $price
+            article: { connect: { name: $name } }
+            stores: { connect: { id: $store } }
+          }
+        }
+      }
+      update: {
+        name: $name
+        unit: $unit
+        quantity: $quantity
+        stores: { connect: { where: { id: $store } } }
+        prices: {
+          create: {
+            price: $price
+            article: { connect: { name: $name } }
+            stores: { connect: { id: $store } }
+          }
+        }
+      }
     }
-  ) {
-    ...ArticleFragment
-  }
-}
-
-mutation updateArticle(
-  $id: ID!
-  $name: String!
-  $unit: String!
-  $price: Float!
-  $quantity: Float!
-  $store: ID!
-) {
-  updateArticle(
-    data: {
-      name: $name
-      unit: $unit
-      price: $price
-      quantity: $quantity
-      stores: { connect: { where: { id: $store } } }
-    }
-    where: { id: $id }
   ) {
     ...ArticleFragment
   }
@@ -62,7 +62,13 @@ fragment ArticleFragment on Article {
   id
   name
   quantity
-  price
+  prices {
+    price
+    stores {
+      id
+      name
+    }
+  }
   stores {
     id
     name

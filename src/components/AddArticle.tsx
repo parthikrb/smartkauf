@@ -6,15 +6,21 @@ import { BottomSheet } from 'react-native-btr';
 import colors from '../config/colors';
 import {
   Article,
-  ArticleCreateInput,
   ArticleFragmentFragmentDoc,
-  useCreateArticleMutation,
+  useUpsertArticleMutation,
 } from '../generated/graphql';
 
 type AddArticleProps = {
   visible: boolean;
   toggle: () => void;
   store: string;
+};
+
+type ArticleProps = {
+  name: string;
+  price: number;
+  quantity: number;
+  unit: string;
 };
 
 const units = ['g', 'kg', 'piece'];
@@ -30,13 +36,13 @@ const AddArticle = ({ visible, toggle, store }: AddArticleProps) => {
     unit: units[BASE_UNIT_INDEX],
   };
 
-  const [article, setArticle] = useState<ArticleCreateInput>(initialArticle);
+  const [article, setArticle] = useState<ArticleProps>(initialArticle);
   const [selectedIndex, setSelectedIndex] = useState(BASE_UNIT_INDEX);
   const [isInvalidArticle, setIsInvalidArticle] = useState(true);
 
-  const [createArticle] = useCreateArticleMutation({
+  const [upsertArticle] = useUpsertArticleMutation({
     variables: {
-      name: article.name,
+      name: `${article.name} - ${article.quantity} ${article.unit}`,
       price: parseFloat(String(article.price)),
       quantity: parseFloat(String(article.quantity)),
       store,
@@ -47,7 +53,7 @@ const AddArticle = ({ visible, toggle, store }: AddArticleProps) => {
         fields: {
           articles(existingArticles: Article[] = []) {
             const newArticle = cache.writeFragment({
-              data: data?.createArticle,
+              data: data?.upsertArticle,
               fragment: ArticleFragmentFragmentDoc,
             });
             return [...existingArticles, newArticle] as Article[];
@@ -58,15 +64,17 @@ const AddArticle = ({ visible, toggle, store }: AddArticleProps) => {
   });
 
   const handleArticleChange = (name: string, value: string) => {
+    const trimmedValue = value.trim();
+    const capitalizedValue = trimmedValue.charAt(0).toUpperCase() + trimmedValue.slice(1);
     setArticle({
       ...article,
-      [name]: value,
+      [name]: name === 'name' ? capitalizedValue : trimmedValue,
     });
   };
 
   const handleAddArticle = async () => {
     if (isInvalidArticle) return;
-    await createArticle();
+    await upsertArticle();
     toggle();
     setArticle(initialArticle);
   };
