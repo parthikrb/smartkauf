@@ -5,6 +5,9 @@ declare module '*/Article.graphql' {
   import { DocumentNode } from 'graphql';
   const defaultDocument: DocumentNode;
   export const getArticles: DocumentNode;
+  export const getArticle: DocumentNode;
+  export const upsertArticle: DocumentNode;
+  export const deleteArticle: DocumentNode;
   export const ArticleFragment: DocumentNode;
 
   export default defaultDocument;
@@ -28,7 +31,13 @@ export const ArticleFragment = gql`
     id
     name
     quantity
-    price
+    prices {
+      price
+      stores {
+        id
+        name
+      }
+    }
     stores {
       id
       name
@@ -49,6 +58,65 @@ export const GetArticles = gql`
     }
   }
   ${ArticleFragment}
+`;
+export const GetArticle = gql`
+  query getArticle($id: ID!) {
+    article(where: { id: $id }) {
+      ...ArticleFragment
+    }
+  }
+  ${ArticleFragment}
+`;
+export const UpsertArticle = gql`
+  mutation upsertArticle(
+    $name: String!
+    $unit: String!
+    $price: Float!
+    $quantity: Float!
+    $store: ID!
+  ) {
+    upsertArticle(
+      where: { name: $name }
+      upsert: {
+        create: {
+          name: $name
+          unit: $unit
+          quantity: $quantity
+          stores: { connect: { id: $store } }
+          prices: {
+            create: {
+              price: $price
+              article: { connect: { name: $name } }
+              stores: { connect: { id: $store } }
+            }
+          }
+        }
+        update: {
+          name: $name
+          unit: $unit
+          quantity: $quantity
+          stores: { connect: { where: { id: $store } } }
+          prices: {
+            create: {
+              price: $price
+              article: { connect: { name: $name } }
+              stores: { connect: { id: $store } }
+            }
+          }
+        }
+      }
+    ) {
+      ...ArticleFragment
+    }
+  }
+  ${ArticleFragment}
+`;
+export const DeleteArticle = gql`
+  mutation deleteArticle($id: ID!) {
+    deleteArticle(where: { id: $id }) {
+      id
+    }
+  }
 `;
 export const GetStores = gql`
   query getStores {

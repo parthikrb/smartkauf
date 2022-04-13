@@ -4,11 +4,71 @@ query getArticles {
   }
 }
 
+query getArticle($id: ID!) {
+  article(where: { id: $id }) {
+    ...ArticleFragment
+  }
+}
+
+mutation upsertArticle(
+  $name: String!
+  $unit: String!
+  $price: Float!
+  $quantity: Float!
+  $store: ID!
+) {
+  upsertArticle(
+    where: { name: $name }
+    upsert: {
+      create: {
+        name: $name
+        unit: $unit
+        quantity: $quantity
+        stores: { connect: { id: $store } }
+        prices: {
+          create: {
+            price: $price
+            article: { connect: { name: $name } }
+            stores: { connect: { id: $store } }
+          }
+        }
+      }
+      update: {
+        name: $name
+        unit: $unit
+        quantity: $quantity
+        stores: { connect: { where: { id: $store } } }
+        prices: {
+          create: {
+            price: $price
+            article: { connect: { name: $name } }
+            stores: { connect: { id: $store } }
+          }
+        }
+      }
+    }
+  ) {
+    ...ArticleFragment
+  }
+}
+
+mutation deleteArticle($id: ID!) {
+  deleteArticle(where: { id: $id }) {
+    id
+  }
+}
+
 fragment ArticleFragment on Article {
   id
   name
   quantity
-  price
+  prices {
+    price
+    stores {
+      id
+      name
+    }
+  }
   stores {
     id
     name

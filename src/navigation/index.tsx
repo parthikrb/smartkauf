@@ -12,7 +12,7 @@ import StoreDetailsScreen from '../screens/StoreDetailsScreen';
 
 export type StoreStackParamList = {
   StoreHome: undefined;
-  StoreDetails: { name: string; location?: string };
+  StoreDetails: { name: string; location?: string; id: string };
 };
 
 type RootStackParamList = {

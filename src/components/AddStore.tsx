@@ -75,7 +75,7 @@ const AddStore = ({ visible, toggle }: AddStoreProps) => {
   return (
     <BottomSheet visible={visible} onBackButtonPress={toggle} onBackdropPress={toggle}>
       <View style={styles.container}>
-        <Text style={styles.title}>New Store</Text>
+        <Text style={styles.title}>Add Store</Text>
         <TextInput
           style={styles.input}
           placeholder="Store Name"
