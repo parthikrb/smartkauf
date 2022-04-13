@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import React from 'react';
 import { render, waitFor } from '@testing-library/react-native';
-import AddStore, { AddStoreProps } from '../../components/AddStore';
+import AddStore, { AddStoreProperties as AddStoreProperties } from '../../components/add-store';
 import { expect } from '@jest/globals';
 import { MockedProvider } from '@apollo/client/testing';
 
@@ -31,18 +31,18 @@ jest.mock('expo-location', () => ({
   ],
 }));
 
-const AddStoreComponent = (props: AddStoreProps) => (
+const AddStoreComponent = (properties: AddStoreProperties) => (
   <MockedProvider mocks={[]}>
-    <AddStore {...props} />
+    <AddStore {...properties} />
   </MockedProvider>
 );
 
-const createTestProps: (props?: {
-  [key in keyof AddStoreProps]?: boolean | any;
-}) => AddStoreProps = (props) => ({
+const createTestProperties: (properties?: {
+  [key in keyof AddStoreProperties]?: boolean | any;
+}) => AddStoreProperties = (properties) => ({
   visible: true,
   toggle: jest.fn(),
-  ...props,
+  ...properties,
 });
 
 // to disable the Reference error
@@ -55,8 +55,8 @@ afterAll(async () => {
 describe('AddStore', () => {
   it('should show the modal by default and location', async () => {
     jest.useRealTimers();
-    const props: AddStoreProps = createTestProps();
-    const rendered = render(<AddStoreComponent {...props} />);
+    const properties: AddStoreProperties = createTestProperties();
+    const rendered = render(<AddStoreComponent {...properties} />);
     await waitFor(() => {
       expect(rendered.getAllByText('Add Store')).toBeTruthy();
     });
@@ -65,14 +65,14 @@ describe('AddStore', () => {
   });
 
   it('should not show the modal when the visible is set to false', () => {
-    const props: AddStoreProps = createTestProps({ visible: false });
-    const rendered = render(<AddStoreComponent {...props} />);
+    const properties: AddStoreProperties = createTestProperties({ visible: false });
+    const rendered = render(<AddStoreComponent {...properties} />);
     expect(rendered.queryByText('Add Store')).toBeNull();
   });
 
   it('should display correctly', () => {
-    const props = createTestProps();
-    const rendered = render(<AddStoreComponent {...props} />);
+    const properties = createTestProperties();
+    const rendered = render(<AddStoreComponent {...properties} />);
     expect(rendered).toMatchInlineSnapshot(`
       <Modal
         animationType="none"

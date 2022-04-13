@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import React from 'react';
 import { fireEvent, render, waitFor } from '@testing-library/react-native';
-import AddArticle, { AddArticleProps } from '../../components/AddArticle';
+import AddArticle, {
+  AddArticleProperties as AddArticleProperties,
+} from '../../components/add-article';
 import { expect } from '@jest/globals';
 import { MockedProvider } from '@apollo/client/testing';
 import { UpsertArticle } from '../../../@types-extensions/graphql.d.ts';
@@ -41,19 +43,19 @@ const mocks = [
   },
 ];
 
-const AddArticleComponent = (props: AddArticleProps) => (
+const AddArticleComponent = (properties: AddArticleProperties) => (
   <MockedProvider mocks={mocks}>
-    <AddArticle {...props} />
+    <AddArticle {...properties} />
   </MockedProvider>
 );
 
-const createTestProps: (props?: {
-  [key in keyof AddArticleProps]?: boolean | any;
-}) => AddArticleProps = (props) => ({
+const createTestProperties: (properties?: {
+  [key in keyof AddArticleProperties]?: boolean | any;
+}) => AddArticleProperties = (properties) => ({
   visible: true,
   toggle: jest.fn(),
   store: article.store,
-  ...props,
+  ...properties,
 });
 
 afterAll(async () => {
@@ -63,8 +65,8 @@ afterAll(async () => {
 describe('AddArticle', () => {
   it('should show the modal by default', async () => {
     jest.useRealTimers();
-    const props: AddArticleProps = createTestProps();
-    const rendered = render(<AddArticleComponent {...props} />);
+    const properties: AddArticleProperties = createTestProperties();
+    const rendered = render(<AddArticleComponent {...properties} />);
     await waitFor(() => {
       expect(rendered.getAllByText('Add Article')).toBeTruthy();
     });
@@ -72,15 +74,15 @@ describe('AddArticle', () => {
 
   it('should not show the modal when the visible is set to false', () => {
     jest.useRealTimers();
-    const props: AddArticleProps = createTestProps({ visible: false });
-    const rendered = render(<AddArticleComponent {...props} />);
+    const properties: AddArticleProperties = createTestProperties({ visible: false });
+    const rendered = render(<AddArticleComponent {...properties} />);
     expect(rendered.queryByText('Add Article')).toBeNull();
   });
 
   it('should allow user to enter the value and create article', () => {
     jest.useRealTimers();
-    const props: AddArticleProps = createTestProps();
-    const rendered = render(<AddArticleComponent {...props} />);
+    const properties: AddArticleProperties = createTestProperties();
+    const rendered = render(<AddArticleComponent {...properties} />);
     expect(rendered.getAllByText('Add Article')).toBeTruthy();
 
     const nameInput = rendered.getByTestId('name');
@@ -97,8 +99,8 @@ describe('AddArticle', () => {
   });
 
   it('should display correctly', () => {
-    const props: AddArticleProps = createTestProps();
-    const rendered = render(<AddArticleComponent {...props} />);
+    const properties: AddArticleProperties = createTestProperties();
+    const rendered = render(<AddArticleComponent {...properties} />);
     expect(rendered).toMatchInlineSnapshot(`
       <Modal
         animationType="none"

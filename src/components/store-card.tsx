@@ -2,31 +2,29 @@ import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import React from 'react';
 import colors from '../config/colors';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { StoreStackParamList } from '../navigation';
+import { StoreStackParameterList as StoreStackParameterList } from '../navigation';
 
-export type StoreCardProps = {
+export type StoreCardProperties = {
   name: string;
   location?: string | null | undefined;
   id: string;
 };
 
-type Location = string | null | undefined;
-
-const invalidLocations: Location[] = [
+const invalidLocations: Set<string | null | undefined> = new Set([
   '',
   'Getting Location...',
   'Permission to access location was denied',
-];
+]);
 
-const StoreCard = ({ name, location, id }: StoreCardProps) => {
-  const navigation: NavigationProp<StoreStackParamList> = useNavigation();
+const StoreCard = ({ name, location, id }: StoreCardProperties) => {
+  const navigation: NavigationProp<StoreStackParameterList> = useNavigation();
   const handleNavigation = () => {
     navigation?.navigate('StoreDetails', { name, id });
   };
   return (
     <TouchableOpacity style={styles.container} onPress={handleNavigation}>
       <Text style={styles.name}>{name}</Text>
-      {!invalidLocations.includes(location) && <Text style={styles.location}>{location}</Text>}
+      {!invalidLocations.has(location) && <Text style={styles.location}>{location}</Text>}
     </TouchableOpacity>
   );
 };

@@ -5,17 +5,21 @@ import { BottomSheet } from 'react-native-btr';
 import { Ionicons } from '@expo/vector-icons';
 import * as Location from 'expo-location';
 import colors from '../config/colors';
-import { Store, useCreateStoreMutation, StoreFragmentFragmentDoc } from '../generated/graphql';
+import {
+  Store,
+  useCreateStoreMutation,
+  StoreFragmentFragmentDoc as StoreFragmentFragmentDocument,
+} from '../generated/graphql';
 
-export type AddStoreProps = {
+export type AddStoreProperties = {
   visible: boolean;
   toggle: () => void;
 };
 
-const AddStore = ({ visible, toggle }: AddStoreProps) => {
+const AddStore = ({ visible, toggle }: AddStoreProperties) => {
   const [name, setName] = useState<string>('');
   const [location, setLocation] = useState<string>('Getting Location...');
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>();
 
   const [createStore] = useCreateStoreMutation({
     variables: {
@@ -28,7 +32,7 @@ const AddStore = ({ visible, toggle }: AddStoreProps) => {
           stores(existingStores: Store[] = []) {
             const newStore = cache.writeFragment({
               data: data?.createStore,
-              fragment: StoreFragmentFragmentDoc,
+              fragment: StoreFragmentFragmentDocument,
             });
             return [...existingStores, newStore] as Store[];
           },
@@ -38,7 +42,7 @@ const AddStore = ({ visible, toggle }: AddStoreProps) => {
   });
 
   const handleAddStore = async () => {
-    if (!name.length || !location.length) return;
+    if (name.length === 0 || location.length === 0) return;
     await createStore();
     toggle();
     setName('');
@@ -48,7 +52,7 @@ const AddStore = ({ visible, toggle }: AddStoreProps) => {
     void (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
+        setErrorMessage('Permission to access location was denied');
         return;
       }
 
@@ -67,10 +71,10 @@ const AddStore = ({ visible, toggle }: AddStoreProps) => {
   }, []);
 
   useEffect(() => {
-    if (errorMsg) {
-      setLocation(errorMsg);
+    if (errorMessage) {
+      setLocation(errorMessage);
     }
-  }, [errorMsg, location]);
+  }, [errorMessage, location]);
 
   return (
     <BottomSheet visible={visible} onBackButtonPress={toggle} onBackdropPress={toggle}>

@@ -2,28 +2,28 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { BlurView } from 'expo-blur';
-import StoreScreen from '../screens/StoreScreen';
-import SearchScreen from '../screens/SearchScreen';
-import CartScreen from '../screens/CartScreen';
+import StoreScreen from '../screens/store-screen';
+import SearchScreen from '../screens/search-screen';
+import CartScreen from '../screens/cart-screen';
 import { Ionicons } from '@expo/vector-icons';
 import { RouteProp } from '@react-navigation/native';
 import colors from '../config/colors';
-import StoreDetailsScreen from '../screens/StoreDetailsScreen';
+import StoreDetailsScreen from '../screens/store-details-screen';
 
-export type StoreStackParamList = {
+export type StoreStackParameterList = {
   StoreHome: undefined;
   StoreDetails: { name: string; location?: string; id: string };
 };
 
-type RootStackParamList = {
+type RootStackParameterList = {
   Store: undefined;
   Search: undefined;
   Cart: undefined;
 };
 
-const Stack = createNativeStackNavigator<StoreStackParamList>();
+const Stack = createNativeStackNavigator<StoreStackParameterList>();
 
-const Tab = createBottomTabNavigator<RootStackParamList>();
+const Tab = createBottomTabNavigator<RootStackParameterList>();
 
 const StoreNavigation = () => {
   return (
@@ -43,7 +43,7 @@ const Navigation = () => {
   return (
     <Tab.Navigator
       initialRouteName="Store"
-      screenOptions={({ route }: { route: RouteProp<RootStackParamList> }) => ({
+      screenOptions={({ route }: { route: RouteProp<RootStackParameterList> }) => ({
         headerShown: false,
         tabBarIcon: ({
           focused,
@@ -56,12 +56,23 @@ const Navigation = () => {
         }) => {
           let iconName;
 
-          if (route.name === 'Store') {
-            iconName = focused ? ('apps' as const) : ('apps-outline' as const);
-          } else if (route.name === 'Search') {
-            iconName = focused ? ('search' as const) : ('search-outline' as const);
-          } else if (route.name === 'Cart') {
-            iconName = focused ? ('cart' as const) : ('cart-outline' as const);
+          switch (route.name) {
+            case 'Store': {
+              iconName = focused ? ('apps' as const) : ('apps-outline' as const);
+
+              break;
+            }
+            case 'Search': {
+              iconName = focused ? ('search' as const) : ('search-outline' as const);
+
+              break;
+            }
+            case 'Cart': {
+              iconName = focused ? ('cart' as const) : ('cart-outline' as const);
+
+              break;
+            }
+            // No default
           }
 
           return <Ionicons name={iconName} size={size} color={color} />;

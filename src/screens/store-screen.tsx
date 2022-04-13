@@ -1,14 +1,14 @@
 import { Dimensions, FlatList, StyleSheet, Text, View } from 'react-native';
 import React, { useCallback, useState } from 'react';
-import GlobalStyles from '../GlobalStyles';
-import FAB from '../components/FAB';
-import AddStore from '../components/AddStore';
+import GlobalStyles from '../global-styles';
+import FAB from '../components/floating-action-button';
+import AddStore from '../components/add-store';
 import { useGetStoresQuery } from '../generated/graphql';
-import StoreCard from '../components/StoreCard';
+import StoreCard from '../components/store-card';
 
 const StoreScreen = () => {
   const [visible, setVisible] = useState(false);
-  const { data, error, loading } = useGetStoresQuery({
+  const { data } = useGetStoresQuery({
     fetchPolicy: 'network-only',
   });
   const toggleBottomSheet = useCallback(() => {
@@ -28,6 +28,7 @@ const StoreScreen = () => {
         <FlatList
           data={data && data.stores}
           numColumns={2}
+          // eslint-disable-next-line unicorn/explicit-length-check
           key={data && data.stores.length}
           renderItem={({ item }) => <StoreCard {...item} />}
           keyExtractor={(item) => item.id}

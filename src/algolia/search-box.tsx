@@ -3,12 +3,12 @@ import { StyleSheet, TextInput } from 'react-native';
 import { connectSearchBox } from 'react-instantsearch-native';
 import colors from '../config/colors';
 
-type SearchBoxProps = {
+type SearchBoxProperties = {
   currentRefinement: string;
   refine: (value: string) => void;
 };
 
-const SearchBox = ({ currentRefinement, refine }: SearchBoxProps) => (
+const SearchBox = ({ currentRefinement, refine }: SearchBoxProperties) => (
   <TextInput
     style={styles.input}
     onChangeText={(value) => refine(value)}

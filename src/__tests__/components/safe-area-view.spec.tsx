@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react-native';
 import { expect } from '@jest/globals';
 import { Text } from 'react-native';
-import SafeAreaView from '../../components/SafeAreaView';
+import SafeAreaView from '../../components/safe-area-view';
 
 describe('SafeAreaView', () => {
   it('display the children', () => {

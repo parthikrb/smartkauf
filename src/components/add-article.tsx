@@ -6,17 +6,17 @@ import { BottomSheet } from 'react-native-btr';
 import colors from '../config/colors';
 import {
   Article,
-  ArticleFragmentFragmentDoc,
+  ArticleFragmentFragmentDoc as ArticleFragmentFragmentDocument,
   useUpsertArticleMutation,
 } from '../generated/graphql';
 
-export type AddArticleProps = {
+export type AddArticleProperties = {
   visible: boolean;
   toggle: () => void;
   store: string;
 };
 
-type ArticleProps = {
+type ArticleProperties = {
   name: string;
   price: number;
   quantity: number;
@@ -28,7 +28,7 @@ const units = ['g', 'kg', 'piece'];
 const BASE_UNIT_INDEX = 0;
 const INITIAL_PRICE_AND_QUANTITY = 0;
 
-const AddArticle = ({ visible, toggle, store }: AddArticleProps) => {
+const AddArticle = ({ visible, toggle, store }: AddArticleProperties) => {
   const initialArticle = {
     name: '',
     price: INITIAL_PRICE_AND_QUANTITY,
@@ -36,15 +36,15 @@ const AddArticle = ({ visible, toggle, store }: AddArticleProps) => {
     unit: units[BASE_UNIT_INDEX],
   };
 
-  const [article, setArticle] = useState<ArticleProps>(initialArticle);
+  const [article, setArticle] = useState<ArticleProperties>(initialArticle);
   const [selectedIndex, setSelectedIndex] = useState(BASE_UNIT_INDEX);
   const [isInvalidArticle, setIsInvalidArticle] = useState(true);
 
   const [upsertArticle] = useUpsertArticleMutation({
     variables: {
       name: `${article.name} - ${article.quantity} ${article.unit}`,
-      price: parseFloat(String(article.price)),
-      quantity: parseFloat(String(article.quantity)),
+      price: Number.parseFloat(String(article.price)),
+      quantity: Number.parseFloat(String(article.quantity)),
       store,
       unit: article.unit as 'g' | 'kg' | 'piece',
     },
@@ -54,7 +54,7 @@ const AddArticle = ({ visible, toggle, store }: AddArticleProps) => {
           articles(existingArticles: Article[] = []) {
             const newArticle = cache.writeFragment({
               data: data?.upsertArticle,
-              fragment: ArticleFragmentFragmentDoc,
+              fragment: ArticleFragmentFragmentDocument,
             });
             return [...existingArticles, newArticle] as Article[];
           },
@@ -82,7 +82,7 @@ const AddArticle = ({ visible, toggle, store }: AddArticleProps) => {
   useEffect(() => {
     setIsInvalidArticle(
       !(
-        article.name.length &&
+        article.name.length > 0 &&
         article.quantity > INITIAL_PRICE_AND_QUANTITY &&
         article.price > INITIAL_PRICE_AND_QUANTITY
       ),

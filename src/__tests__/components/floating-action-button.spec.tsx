@@ -1,25 +1,25 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react-native';
-import FAB, { FABProps } from '../../components/FAB';
+import FAB, { FABProperties as FABProperties } from '../../components/floating-action-button';
 import { expect } from '@jest/globals';
 
-const createTestProps: () => FABProps = () => ({
+const createTestProperties: () => FABProperties = () => ({
   bottom: 20,
   onPress: jest.fn(),
 });
 
 describe('FAB', () => {
   it('should call onPress callback', () => {
-    const props: FABProps = createTestProps();
-    const rendered = render(<FAB {...props} />);
+    const properties: FABProperties = createTestProperties();
+    const rendered = render(<FAB {...properties} />);
     const button = rendered.getByTestId('FAB');
     fireEvent.press(button);
-    expect(props.onPress).toHaveBeenCalled();
+    expect(properties.onPress).toHaveBeenCalled();
   });
 
   it('displays correctly', () => {
-    const props: FABProps = createTestProps();
-    const rendered = render(<FAB {...props} />);
+    const properties: FABProperties = createTestProperties();
+    const rendered = render(<FAB {...properties} />);
     expect(rendered).toMatchInlineSnapshot(`
       <View
         accessible={true}
