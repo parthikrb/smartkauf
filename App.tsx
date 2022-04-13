@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { ApolloClient, InMemoryCache, ApolloProvider, ApolloLink, HttpLink } from '@apollo/client';
 import { ErrorResponse, onError } from '@apollo/client/link/error';
 import Navigation from './src/navigation';
-import SafeAreaView from './src/components/SafeAreaView';
+import SafeAreaView from './src/components/safe-area-view';
 import { GraphQLError } from 'graphql';
 import { LogBox } from 'react-native';
 

@@ -1,6 +1,6 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import React from 'react';
-import GlobalStyles from '../GlobalStyles';
+import GlobalStyles from '../global-styles';
 
 const CartScreen = () => {
   return (
@@ -11,5 +11,3 @@ const CartScreen = () => {
 };
 
 export default CartScreen;
-
-const styles = StyleSheet.create({});

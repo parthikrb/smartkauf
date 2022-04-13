@@ -3,12 +3,12 @@ import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import colors from '../config/colors';
 
-export type FABProps = {
+export type FABProperties = {
   bottom?: number;
   onPress: () => void;
 };
 
-const FAB = ({ bottom, onPress }: FABProps) => {
+const FAB = ({ bottom, onPress }: FABProperties) => {
   return (
     <TouchableOpacity
       style={[styles.FAB, { bottom: bottom ? bottom : 20 }]}

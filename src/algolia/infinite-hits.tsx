@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, FlatList } from 'react-native';
 import { connectInfiniteHits } from 'react-instantsearch-native';
-import Highlight from './Highlight';
+import Highlight from './highlight-text';
 import { Article } from '../generated/graphql';
 
 const styles = StyleSheet.create({
@@ -18,13 +18,13 @@ const styles = StyleSheet.create({
   },
 });
 
-type InfiniteHitsProps = {
+type InfiniteHitsProperties = {
   hits: Article[];
   hasMore: boolean;
   refineNext: () => void;
 };
 
-const InfiniteHits = ({ hits, hasMore, refineNext }: InfiniteHitsProps) => (
+const InfiniteHits = ({ hits, hasMore, refineNext }: InfiniteHitsProperties) => (
   <FlatList
     data={hits}
     keyExtractor={(item) => item.id}

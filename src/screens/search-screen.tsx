@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import GlobalStyles from '../GlobalStyles';
+import GlobalStyles from '../global-styles';
 import { InstantSearch, connectRefinementList } from 'react-instantsearch-native';
-import SearchBox from './../algolia/SearchBox';
-import InfiniteHits from './../algolia/InfiniteHits';
+import SearchBox from '../algolia/search-box';
+import InfiniteHits from '../algolia/infinite-hits';
 import { useGetArticlesQuery } from '../generated/graphql';
 import algoliasearch, { SearchIndex } from 'algoliasearch';
 
+// eslint-disable-next-line unicorn/no-null
 const VirtualRefinementList = connectRefinementList(() => null);
 
 const SearchScreen = () => {
@@ -25,6 +26,7 @@ const SearchScreen = () => {
 
   useEffect(() => {
     data &&
+      // eslint-disable-next-line unicorn/no-array-for-each
       data.articles.forEach((article) => {
         const algoliaArticle = {
           ...article,
@@ -32,6 +34,7 @@ const SearchScreen = () => {
         };
         index.saveObject(algoliaArticle).catch((error) => console.error(error));
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const onSearchStateChange = (searchState: any) => {
@@ -56,5 +59,3 @@ const SearchScreen = () => {
 };
 
 export default SearchScreen;
-
-const styles = StyleSheet.create({});

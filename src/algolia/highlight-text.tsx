@@ -3,25 +3,25 @@ import React from 'react';
 import { Text } from 'react-native';
 import { connectHighlight } from 'react-instantsearch-native';
 
-type BaseProps = {
+type BaseProperties = {
   attribute: string;
   hit: any;
 };
 
-type HighlightOptionsProps = BaseProps & {
+type HighlightOptionsProperties = BaseProperties & {
   highlightProperty: string;
 };
 
-type HighlightsOutputProps = {
+type HighlightsOutputProperties = {
   value: string;
   isHighlighted: boolean;
 };
 
-type HighlightProps = BaseProps & {
-  highlight: (options: HighlightOptionsProps) => HighlightsOutputProps[];
+type HighlightProperties = BaseProperties & {
+  highlight: (options: HighlightOptionsProperties) => HighlightsOutputProperties[];
 };
 
-const Highlight = ({ attribute, hit, highlight }: HighlightProps) => {
+const Highlight = ({ attribute, hit, highlight }: HighlightProperties) => {
   const highlights = highlight({
     highlightProperty: '_highlightResult',
     attribute,
@@ -30,7 +30,7 @@ const Highlight = ({ attribute, hit, highlight }: HighlightProps) => {
 
   return (
     <Text>
-      {highlights.map(({ value, isHighlighted }: HighlightsOutputProps, index) => {
+      {highlights.map(({ value, isHighlighted }: HighlightsOutputProperties, index) => {
         const style = {
           backgroundColor: isHighlighted ? 'yellow' : 'transparent',
         };

@@ -2,6 +2,7 @@ module.exports = {
   env: {
     node: true,
     es2021: true,
+    es2022: true,
     jest: true,
   },
   extends: [
@@ -12,6 +13,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
     'plugin:cypress/recommended',
+    'plugin:unicorn/recommended',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -22,7 +24,7 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
-  plugins: ['react', 'react-hooks', '@typescript-eslint', 'prettier'],
+  plugins: ['react', 'react-hooks', '@typescript-eslint', 'prettier', 'unicorn'],
   rules: {
     indent: ['error', 2, { SwitchCase: 1 }],
     'linebreak-style': ['error', 'unix'],
@@ -35,5 +37,7 @@ module.exports = {
     'prettier/prettier': 'error',
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
+    'react/jsx-uses-react': 'error',
+    'react/jsx-uses-vars': 'error',
   },
 };

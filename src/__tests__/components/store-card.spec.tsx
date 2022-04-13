@@ -1,43 +1,44 @@
 import React from 'react';
 import { render } from '@testing-library/react-native';
 import { expect } from '@jest/globals';
-import StoreCard, { StoreCardProps } from '../../components/StoreCard';
+import StoreCard, { StoreCardProperties as StoreCardProperties } from '../../components/store-card';
 import { NavigationContainer } from '@react-navigation/native';
 
-const StoreCardComponent = (props: StoreCardProps) => (
+const StoreCardComponent = (properties: StoreCardProperties) => (
   <NavigationContainer>
-    <StoreCard {...props} />
+    <StoreCard {...properties} />
   </NavigationContainer>
 );
 
-const createTestProps: (props?: {
-  [key in keyof StoreCardProps]?: string;
-}) => StoreCardProps = (props) => ({
+const createTestProperties: (properties?: {
+  [key in keyof StoreCardProperties]?: string;
+}) => StoreCardProperties = (properties) => ({
   name: 'Store Name',
   location: 'Getting Location...',
-  ...props,
+  id: 'store-id',
+  ...properties,
 });
 
 describe('StoreCard', () => {
   it('should not show location but name', () => {
-    const props: StoreCardProps = createTestProps();
-    const { getByText, queryByText } = render(<StoreCardComponent {...props} />);
+    const properties: StoreCardProperties = createTestProperties();
+    const { getByText, queryByText } = render(<StoreCardComponent {...properties} />);
     expect(getByText('Store Name')).toBeTruthy();
     expect(queryByText('Getting Location...')).toBeNull();
   });
 
   it('should show the valid location', () => {
-    const props: StoreCardProps = createTestProps({
+    const properties: StoreCardProperties = createTestProperties({
       location: 'Bairro, Cidade',
     });
-    const { getByText } = render(<StoreCardComponent {...props} />);
+    const { getByText } = render(<StoreCardComponent {...properties} />);
     expect(getByText('Store Name')).toBeTruthy();
     expect(getByText('Bairro, Cidade')).toBeTruthy();
   });
 
   it('should display the component correctly', () => {
-    const props: StoreCardProps = createTestProps();
-    const rendered = render(<StoreCardComponent {...props} />);
+    const properties: StoreCardProperties = createTestProperties();
+    const rendered = render(<StoreCardComponent {...properties} />);
     expect(rendered).toMatchInlineSnapshot(`
       <View
         accessible={true}
