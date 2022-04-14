@@ -74,7 +74,7 @@
     "@types/react": "18.0.1",
     "@types/react-instantsearch-native": "6.3.2",
     "@types/react-native": "0.67.4",
-    "@types/react-test-renderer": "17.0.1",
+    "@types/react-test-renderer": "17.0.2",
     "@typescript-eslint/eslint-plugin": "5.19.0",
     "@typescript-eslint/parser": "5.19.0",
     "cypress": "9.5.4",
