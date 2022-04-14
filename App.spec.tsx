@@ -255,7 +255,7 @@ describe('<App />', () => {
                               style={
                                 Object {
                                   "alignItems": "center",
-                                  "backgroundColor": "#48A14D",
+                                  "backgroundColor": "#0DBB89",
                                   "borderRadius": 25,
                                   "bottom": 90,
                                   "display": "flex",
@@ -433,7 +433,7 @@ describe('<App />', () => {
                     }
                   >
                     <View
-                      color="#48A14D"
+                      color="#0DBB89"
                       name="apps"
                       size={25}
                     />
@@ -472,7 +472,7 @@ describe('<App />', () => {
                         "textAlign": "center",
                       },
                       Object {
-                        "color": "#48A14D",
+                        "color": "#0DBB89",
                       },
                       Object {
                         "fontSize": 10,
@@ -555,7 +555,7 @@ describe('<App />', () => {
                     }
                   >
                     <View
-                      color="#48A14D"
+                      color="#0DBB89"
                       name="search"
                       size={25}
                     />
@@ -677,7 +677,7 @@ describe('<App />', () => {
                     }
                   >
                     <View
-                      color="#48A14D"
+                      color="#0DBB89"
                       name="cart"
                       size={25}
                     />
