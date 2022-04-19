@@ -35,7 +35,7 @@ describe('FAB', () => {
         style={
           Object {
             "alignItems": "center",
-            "backgroundColor": "#48A14D",
+            "backgroundColor": "#0DBB89",
             "borderRadius": 25,
             "bottom": 20,
             "display": "flex",
