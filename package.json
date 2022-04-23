@@ -90,7 +90,7 @@
     "jest-transform-stub": "2.0.0",
     "lint-staged": "12.4.0",
     "prettier": "2.6.2",
-    "react-native-gesture-handler": "2.4.0",
+    "react-native-gesture-handler": "2.4.1",
     "react-native-reanimated": "2.7.0",
     "react-native-screens": "3.13.1",
     "react-test-renderer": "18.0.0",
