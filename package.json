@@ -37,7 +37,7 @@
     "@react-native-segmented-control/segmented-control": "2.4.0",
     "@react-navigation/bottom-tabs": "6.3.1",
     "@react-navigation/native": "6.0.10",
-    "@react-navigation/native-stack": "6.6.1",
+    "@react-navigation/native-stack": "6.6.2",
     "algoliasearch": "4.13.0",
     "cross-fetch": "3.1.5",
     "dotenv": "16.0.0",
