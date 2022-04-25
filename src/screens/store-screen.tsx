@@ -37,7 +37,7 @@ const StoreScreen = () => {
         />
       </View>
       <AddStore visible={visible} toggle={toggleBottomSheet} />
-      <FAB bottom={90} onPress={toggleBottomSheet} />
+      <FAB bottom={90} onPress={toggleBottomSheet} testID="addStore" />
     </View>
   );
 };

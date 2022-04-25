@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import React from 'react';
 import { render, waitFor } from '@testing-library/react-native';
 import AddStore, { AddStoreProperties as AddStoreProperties } from '../../components/add-store';
@@ -201,6 +199,7 @@ describe('AddStore', () => {
                   "width": "80%",
                 }
               }
+              testID="storeName"
               value=""
             />
             <View
@@ -258,6 +257,7 @@ describe('AddStore', () => {
                   "width": "80%",
                 }
               }
+              testID="addStoreButton"
             >
               <Text
                 style={
