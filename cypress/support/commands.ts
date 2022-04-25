@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 // ***********************************************
 // This example commands.js shows you how to
 // create various custom commands and overwrite
@@ -23,3 +25,26 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+import '@testing-library/cypress/add-commands';
+
+// create a command to add store in the app
+Cypress.Commands.add('addStore', (name: string) => {
+  cy.findByTestId('addStore').click();
+  cy.findByTestId('storeName').type(name);
+  cy.findByTestId('addStoreButton').click();
+});
+
+Cypress.Commands.add('deleteStore', (name: string) => {
+  cy.findByTestId(name).click();
+  cy.findByTestId('deleteStore').click();
+});
+
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace Cypress {
+    interface Chainable {
+      addStore(name: string): Chainable<Element>;
+      deleteStore(name: string): Chainable<Element>;
+    }
+  }
+}

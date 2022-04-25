@@ -1,6 +1,6 @@
 {
     "fixturesFolder": false,
-    "supportFile": false,
-    "pluginsFile": false,
+    "supportFile": "cypress/support/index.ts",
+    "pluginsFile": "cypress/plugins/index.ts",
     "baseUrl": "http://localhost:19006"
 }
