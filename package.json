@@ -45,7 +45,7 @@
     "expo-blur": "11.0.0",
     "expo-location": "14.0.2",
     "expo-status-bar": "1.2.0",
-    "graphql": "16.3.0",
+    "graphql": "16.4.0",
     "jest": "27.5.1",
     "jest-expo": "44.0.1",
     "react": "18.0.0",
