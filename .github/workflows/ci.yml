@@ -30,7 +30,7 @@ jobs:
     needs:
       - t_unit
     runs-on: ubuntu-latest
-    container: cypress/browsers:node16.5.0-chrome94-ff93
+    container: cypress/browsers:node16.14.0-slim-chrome99-ff97
     steps:
       - name: 🏗 Setup repo
         uses: actions/checkout@v3
