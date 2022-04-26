@@ -28,6 +28,17 @@
 import '@testing-library/cypress/add-commands';
 import { captureStoreState, getStoreState } from './utils';
 
+Cypress.on('uncaught:exception', (error, runnable, promise) => {
+  // when the exception originated from an unhandled promise
+  // rejection, the promise is provided as a third argument
+  // you can turn off failing the test in this case
+  if (promise) {
+    return false;
+  }
+  // we still want to ensure there are no other unexpected
+  // errors, so we let them fail the test
+});
+
 // create a command to add store in the app
 Cypress.Commands.add('addStore', (name: string) => {
   cy.findByTestId('addStore').click();
