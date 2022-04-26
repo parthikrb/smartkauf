@@ -26,15 +26,22 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 import '@testing-library/cypress/add-commands';
+import { captureStoreState, getStoreState } from './utils';
 
 // create a command to add store in the app
 Cypress.Commands.add('addStore', (name: string) => {
   cy.findByTestId('addStore').click();
   cy.findByTestId('storeName').type(name);
+
+  captureStoreState(name);
+
   cy.findByTestId('addStoreButton').click();
 });
 
 Cypress.Commands.add('deleteStore', (name: string) => {
+  const storeState = getStoreState();
+  if (storeState.length === 0) return;
+
   cy.findByTestId(name).click();
   cy.findByTestId('deleteStore').click();
 });
