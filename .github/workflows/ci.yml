@@ -30,7 +30,6 @@ jobs:
     needs:
       - t_unit
     runs-on: ubuntu-latest
-    container: cypress/browsers:node12.18.3-chrome87-ff82
     strategy:
       fail-fast: false
       matrix:
@@ -70,9 +69,8 @@ jobs:
         with:
           start: npm run web
           wait-on: 'http://localhost:19006'
-          browser: chrome
           record: true
           parallel: true
-          group: 'E2E - Chrome'
+          group: 'E2E -Browser'
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
