@@ -2,6 +2,6 @@
     "fixturesFolder": false,
     "supportFile": "cypress/support/index.ts",
     "pluginsFile": "cypress/plugins/index.ts",
-    "baseUrl": "https://google.com",
+    "baseUrl": "http://localhost:19006",
     "projectId": "p6961d"
 }
