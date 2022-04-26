@@ -75,7 +75,7 @@
     "@graphql-codegen/typescript-operations": "2.3.5",
     "@graphql-codegen/typescript-react-apollo": "3.2.11",
     "@react-native/assets": "1.0.0",
-    "@testing-library/react-native": "9.1.0",
+    "@testing-library/react-native": "9.2.0",
     "@types/jest": "27.4.1",
     "@types/react": "18.0.1",
     "@types/react-instantsearch-native": "6.3.2",
