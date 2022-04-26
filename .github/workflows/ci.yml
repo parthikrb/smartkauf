@@ -30,6 +30,7 @@ jobs:
     needs:
       - t_unit
     runs-on: ubuntu-latest
+    container: cypress/browsers:node16.5.0-chrome94-ff93
     steps:
       - name: 🏗 Setup repo
         uses: actions/checkout@v3
@@ -63,8 +64,11 @@ jobs:
       - name: 🧪 Cypress run
         uses: cypress-io/github-action@v2
         with:
+          install: false
           start: npm run web
           wait-on: 'http://localhost:19006'
           record: true
+          browser: chrome
+          wait-on-timeout: 120
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
