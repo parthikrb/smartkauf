@@ -32,10 +32,9 @@ import { captureStoreState, getStoreState } from './utils';
 Cypress.Commands.add('addStore', (name: string) => {
   cy.findByTestId('addStore').click();
   cy.findByTestId('storeName').type(name);
+  cy.findByTestId('addStoreButton').click();
 
   captureStoreState(name);
-
-  cy.findByTestId('addStoreButton').click();
 });
 
 Cypress.Commands.add('deleteStore', (name: string) => {
