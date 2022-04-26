@@ -30,10 +30,6 @@ jobs:
     needs:
       - t_unit
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        containers: [1, 2, 3]
     steps:
       - name: 🏗 Setup repo
         uses: actions/checkout@v3
@@ -70,7 +66,5 @@ jobs:
           start: npm run web
           wait-on: 'http://localhost:19006'
           record: true
-          parallel: true
-          group: 'E2E -Browser'
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
