@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable unicorn/prefer-module */
 
 /**
  * This file contains the configuration for Apollo client.
