@@ -1,5 +1,13 @@
 name: smartkauf - CI
 on: [push]
+env:
+  SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT}}
+  SENTRY_TOKEN: ${{ secrets.SENTRY_TOKEN}}
+  SENTRY_DSN: ${{ secrets.SENTRY_DSN}}
+  ALGOLIA_APP_ID: ${{ secrets.ALGOLIA_APP_ID}}
+  ALGOLIA_KEY: ${{ secrets.ALGOLIA_KEY}}
+  GRAPHCMS_API: ${{ secrets.GRAPHCMS_API}}
+  GRAPHCMS_TOKEN: ${{ secrets.GRAPHCMS_TOKEN}}
 jobs:
   t_unit:
     runs-on: ubuntu-latest
