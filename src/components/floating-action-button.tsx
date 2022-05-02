@@ -6,16 +6,17 @@ import colors from '../config/colors';
 export type FABProperties = {
   bottom?: number;
   onPress: () => void;
+  testID?: string;
 };
 
-const FAB = ({ bottom, onPress }: FABProperties) => {
+const FAB = ({ bottom, onPress, testID = 'FAB' }: FABProperties) => {
   return (
     <TouchableOpacity
       style={[styles.FAB, { bottom: bottom ? bottom : 20 }]}
       onPress={onPress}
-      testID="FAB"
+      testID={testID}
     >
-      <Ionicons name="add-outline" size={40} color={colors.white} />
+      <Ionicons name="add-outline" size={40} color={colors.white} testID={`${testID}-icon`} />
     </TouchableOpacity>
   );
 };

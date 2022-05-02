@@ -22,7 +22,7 @@ const StoreCard = ({ name, location, id }: StoreCardProperties) => {
     navigation?.navigate('StoreDetails', { name, id });
   };
   return (
-    <TouchableOpacity style={styles.container} onPress={handleNavigation}>
+    <TouchableOpacity style={styles.container} onPress={handleNavigation} testID={name}>
       <Text style={styles.name}>{name}</Text>
       {!invalidLocations.has(location) && <Text style={styles.location}>{location}</Text>}
     </TouchableOpacity>

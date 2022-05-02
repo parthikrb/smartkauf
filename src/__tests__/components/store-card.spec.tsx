@@ -73,6 +73,7 @@ describe('StoreCard', () => {
             "width": "45%",
           }
         }
+        testID="Store Name"
       >
         <Text
           style={

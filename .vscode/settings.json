@@ -1,4 +1,14 @@
 {
-  "cSpell.words": ["algoliasearch", "GRAPHCMS", "instantsearch", "Ionicons", "smartkauf", "upsert"],
+  "cSpell.words": [
+    "algoliasearch",
+    "Chainable",
+    "GRAPHCMS",
+    "instantsearch",
+    "Ionicons",
+    "smartkauf",
+    "tablist",
+    "textbox",
+    "upsert"
+  ],
   "typescript.tsdk": "node_modules/typescript/lib"
 }
