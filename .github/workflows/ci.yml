@@ -1,5 +1,13 @@
 name: smartkauf - CI
 on: [push]
+env:
+  SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT}}
+  SENTRY_TOKEN: ${{ secrets.SENTRY_TOKEN}}
+  SENTRY_DSN: ${{ secrets.SENTRY_DSN}}
+  ALGOLIA_APP_ID: ${{ secrets.ALGOLIA_APP_ID}}
+  ALGOLIA_KEY: ${{ secrets.ALGOLIA_KEY}}
+  GRAPHCMS_API: ${{ secrets.GRAPHCMS_API}}
+  GRAPHCMS_TOKEN: ${{ secrets.GRAPHCMS_TOKEN}}
 jobs:
   t_unit:
     runs-on: ubuntu-latest
@@ -30,18 +38,19 @@ jobs:
     needs:
       - t_unit
     runs-on: ubuntu-latest
+    container: cypress/browsers:node16.14.0-slim-chrome99-ff97
     steps:
       - name: 🏗 Setup repo
         uses: actions/checkout@v3
+
+      - name: 🏗 Setup Node
+        uses: actions/setup-node@v3
 
       - name: 🏗 Setup Expo
         uses: expo/expo-github-action@v7
         with:
           expo-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
-
-      - name: 🏗 Setup Node
-        uses: actions/setup-node@v3
 
       - name: 📪 Get yarn cache
         id: yarn-cache
@@ -63,5 +72,11 @@ jobs:
       - name: 🧪 Cypress run
         uses: cypress-io/github-action@v2
         with:
-          start: npm run web
+          install: false
+          start: yarn run web
           wait-on: 'http://localhost:19006'
+          record: true
+          browser: chrome
+          wait-on-timeout: 120
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}

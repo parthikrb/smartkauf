@@ -53,6 +53,7 @@ describe('FAB', () => {
           color="#F3F9FC"
           name="add-outline"
           size={40}
+          testID="FAB-icon"
         />
       </View>
     `);

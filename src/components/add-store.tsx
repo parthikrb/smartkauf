@@ -81,6 +81,7 @@ const AddStore = ({ visible, toggle }: AddStoreProperties) => {
       <View style={styles.container}>
         <Text style={styles.title}>Add Store</Text>
         <TextInput
+          testID="storeName"
           style={styles.input}
           placeholder="Store Name"
           value={name}
@@ -99,6 +100,7 @@ const AddStore = ({ visible, toggle }: AddStoreProperties) => {
           ]}
           onPress={handleAddStore}
           disabled={!name}
+          testID="addStoreButton"
         >
           <Text style={styles.buttonText}>Add Store</Text>
         </TouchableOpacity>

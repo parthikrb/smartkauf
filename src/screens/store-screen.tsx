@@ -1,16 +1,20 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { Dimensions, FlatList, StyleSheet, Text, View } from 'react-native';
 import React, { useCallback, useState } from 'react';
+
 import GlobalStyles from '../global-styles';
 import FAB from '../components/floating-action-button';
 import AddStore from '../components/add-store';
 import { useGetStoresQuery } from '../generated/graphql';
 import StoreCard from '../components/store-card';
+import Sentry from '../sentry';
 
 const StoreScreen = () => {
   const [visible, setVisible] = useState(false);
   const { data } = useGetStoresQuery({
     fetchPolicy: 'network-only',
   });
+  Sentry.captureMessage(`StoreScreen data: ${JSON.stringify(data)}`);
   const toggleBottomSheet = useCallback(() => {
     setVisible(!visible);
   }, [visible]);
@@ -37,7 +41,7 @@ const StoreScreen = () => {
         />
       </View>
       <AddStore visible={visible} toggle={toggleBottomSheet} />
-      <FAB bottom={90} onPress={toggleBottomSheet} />
+      <FAB bottom={90} onPress={toggleBottomSheet} testID="addStore" />
     </View>
   );
 };
