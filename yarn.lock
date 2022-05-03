@@ -7403,7 +7403,7 @@ jest-util@^27.5.1:
     graceful-fs "^4.2.9"
     picomatch "^2.2.3"
 
-jest-util@^28.0.2:
+jest-util@^28.0.0, jest-util@^28.0.2:
   version "28.0.2"
   resolved "https://registry.yarnpkg.com/jest-util/-/jest-util-28.0.2.tgz#8e22cdd6e0549e0a393055f0e2da7eacc334b143"
   integrity sha512-EVdpIRCC8lzqhp9A0u0aAKlsFIzufK6xKxNK7awsnebTdOP4hpyQW5o6Ox2qPl8gbeUKYF+POLyItaND53kpGA==
