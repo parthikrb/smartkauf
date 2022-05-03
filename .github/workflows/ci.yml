@@ -33,7 +33,7 @@ jobs:
         run: yarn install --immutable
 
       - name: 🧪 Jest run
-        run: yarn test
+        run: yarn test --detectOpenHandles
   t_e2e:
     needs:
       - t_unit
