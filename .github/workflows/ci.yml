@@ -119,5 +119,17 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-args: '--prod'
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}} 
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
           working-directory: ./web-build
+
+      - name: ⏲️ Wait for deploy
+        uses: UnlyEd/github-action-await-vercel@v1.2.14
+        id: await-vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        with:
+          deployment-url: ${{ steps.deploy-vercel-staging.outputs.preview-url }}
+          timeout: 10
+
+      - name: 💹 Deployment status
+        run: 'echo 💹 The deployment at ${{ fromJson(steps.await-vercel.outputs.deploymentDetails).url }} is ${{ fromJson(steps.await-vercel.outputs.deploymentDetails).readyState }}'
