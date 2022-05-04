@@ -135,4 +135,4 @@ jobs:
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
           working-directory: ./web-build
           alias-domains: |
-            pr-{{PR_NUMBER}}.smartkauf.vercel.app
+            pr-{{PR_NUMBER}}.smartkauf.vercel-action.amond.dev
