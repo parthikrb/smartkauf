@@ -12,5 +12,7 @@
   message: 'Small PR'
   color: 'green'
   when: '$additions < 200 || $deletions < 200'
+- label: 'Preview'
+  url: 'https://pr-$prNumber.smartkauf.vercel.app'
 - message: '$commits commits across $changedFiles files'
   color: 'crimson'
