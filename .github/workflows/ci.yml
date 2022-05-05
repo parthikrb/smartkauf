@@ -74,7 +74,7 @@ jobs:
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
   deploy:
-    # needs: [t_unit, t_e2e]
+    needs: [t_unit, t_e2e]
     runs-on: ubuntu-latest
     steps:
       - name: 🏗 Setup repo
