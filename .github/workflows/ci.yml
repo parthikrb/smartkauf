@@ -112,8 +112,8 @@ jobs:
       #   env:
       #     PR: ${{ steps.findPr.outputs.number }}
 
-
-      - run: "echo pr-{{PR}}.parthibanbaskar.vercel.app"
+      - run: echo "Your PR is ${PR}"
+      - run: "echo pr-{${PR}}.parthibanbaskar.vercel.app"
 
 
       # - name: 📦 Deploy the PR
