@@ -7,6 +7,12 @@ on:
     paths-ignore:
       - '**/*.md'
       - '**/*.yml'
+  pull_request:
+    branches:
+      - '*'
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.yml'
 
 env:
   SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT}}
