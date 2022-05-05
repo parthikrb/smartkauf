@@ -113,7 +113,7 @@ jobs:
           PR: ${{ steps.findPr.outputs.pr }}
 
       - name: 📦 Deploy test
-        run: "echo pr-${{ PR }}.parthibanbaskar.vercel.app"
+        run: "echo pr-{{PR}}.parthibanbaskar.vercel.app"
 
       # - name: 📦 Deploy the PR
       #   if: steps.findPr.outputs.number
