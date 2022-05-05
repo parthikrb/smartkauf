@@ -125,7 +125,10 @@ jobs:
       #       pr-${{ steps.findPr.outputs.pr }}.parthibanbaskar.vercel.app
       
       - name: 📦 Deploy the PR check
-        run: "echo ${{steps.findPr.outputs.number}} === null || ${{steps.findPr.outputs.number}} === undefined"
+      - run: "echo ${{steps.findPr.outputs.number}} == null || ${{steps.findPr.outputs.number}} == undefined"
+      - run: "echo ${{steps.findPr.outputs.number}} == undefined"
+      - run: "echo ${{steps.findPr.outputs.number}} == null"
+      - run: "echo isNaN(${{steps.findPr.outputs.number}})"
 
       # - name: 📦 Deploy main branch
       #   if: ${{steps.findPr.outputs.number}} === null || ${{steps.findPr.outputs.number}} === undefined
