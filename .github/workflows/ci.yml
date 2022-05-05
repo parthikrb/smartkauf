@@ -98,6 +98,7 @@ jobs:
         run: expo build:web
 
       - name: 📦 Deploy
+        run: 'echo pr-${{github.event.number}}.smartkauf.xyz'
         uses: amondnet/vercel-action@v20
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
