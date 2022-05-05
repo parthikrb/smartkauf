@@ -13,6 +13,7 @@
   color: 'green'
   when: '$additions < 200 || $deletions < 200'
 - label: 'Preview'
+  color: 'yellow'
   url: 'https://pr-${{github.event.pull_request.number}}.parthibanbaskar.vercel.app'
 - message: '$commits commits across $changedFiles files'
   color: 'crimson'
