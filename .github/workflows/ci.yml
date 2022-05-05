@@ -98,6 +98,20 @@ jobs:
       - name: 📦 Build
         run: expo build:web
 
+      - name: 📦 Find PR
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+        with:
+          # Can be "open", "closed", or "all".  Defaults to "open".
+          state: open
+
+      # This will echo "Your PR is 7", or be skipped if there is no current PR.
+      - name: 💡 Check if PR is found
+        run: echo "Your PR is ${PR}"
+        if: success() && steps.findPr.outputs.number
+        env:
+          PR: ${{ steps.findPr.outputs.pr }}
+
       - name: 📦 Deploy
         uses: amondnet/vercel-action@v20
         with:
@@ -107,4 +121,4 @@ jobs:
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
           working-directory: ./web-build
           alias-domains: |
-            pr-${{github.event.pull_request.number}}.parthibanbaskar.vercel.app
+            pr-${{PR}}.parthibanbaskar.vercel.app
