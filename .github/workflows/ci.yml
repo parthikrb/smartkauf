@@ -6,6 +6,7 @@ on:
       - '*'
     paths-ignore:
       - '*.md'
+      - '*.yml'
 
 env:
   SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT}}
@@ -97,8 +98,6 @@ jobs:
       - name: 📦 Build
         run: expo build:web
 
-      - name: 📦 Publish
-        run: 'echo pr-${{github.event.number}}.smartkauf.xyz'
 
       - name: 📦 Deploy
         uses: amondnet/vercel-action@v20
@@ -109,4 +108,4 @@ jobs:
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
           working-directory: ./web-build
           alias-domains: |
-            pr-${{github.event.number}}.smartkauf.xyz
+            pr-${{github.event.number}}.parthibanbaskar.vercel.app
