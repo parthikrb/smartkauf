@@ -92,11 +92,11 @@ jobs:
       - name: 📪 Get yarn cache
         uses: c-hive/gha-yarn-cache@v2
 
-      - name: 📦 Install dependencies
-        run: yarn install --immutable
+      # - name: 📦 Install dependencies
+      #   run: yarn install --immutable
 
-      - name: 📦 Build
-        run: expo build:web
+      # - name: 📦 Build
+      #   run: expo build:web
 
       - name: 📦 Find PR
         uses: jwalton/gh-find-current-pr@v1
@@ -112,8 +112,10 @@ jobs:
         env:
           PR: ${{ steps.findPr.outputs.number }}
 
-      - name: 📦 Deploy test
-        run: "echo pr-${PR}.parthibanbaskar.vercel.app"
+
+      - run: "echo pr-${PR}.parthibanbaskar.vercel.app"
+      - run: "echo pr-${{PR}}.parthibanbaskar.vercel.app"
+      - run: "echo pr-{PR}.parthibanbaskar.vercel.app"
 
       # - name: 📦 Deploy the PR
       #   if: steps.findPr.outputs.number
