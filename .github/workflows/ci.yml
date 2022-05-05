@@ -114,7 +114,6 @@ jobs:
 
 
       - run: "echo pr-${PR}.parthibanbaskar.vercel.app"
-      - run: "echo pr-${{PR}}.parthibanbaskar.vercel.app"
       - run: "echo pr-{PR}.parthibanbaskar.vercel.app"
 
       # - name: 📦 Deploy the PR
