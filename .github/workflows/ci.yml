@@ -1,5 +1,19 @@
 name: smartkauf - CI
-on: [push]
+
+on:
+  push:
+    branches:
+      - '*'
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.yml'
+  pull_request:
+    branches:
+      - '*'
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.yml'
+
 env:
   SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT}}
   SENTRY_TOKEN: ${{ secrets.SENTRY_TOKEN}}
@@ -8,6 +22,7 @@ env:
   ALGOLIA_KEY: ${{ secrets.ALGOLIA_KEY}}
   GRAPHCMS_API: ${{ secrets.GRAPHCMS_API}}
   GRAPHCMS_TOKEN: ${{ secrets.GRAPHCMS_TOKEN}}
+
 jobs:
   t_unit:
     runs-on: ubuntu-latest
@@ -19,15 +34,7 @@ jobs:
         uses: actions/setup-node@v3
 
       - name: 📪 Get yarn cache
-        id: yarn-cache
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-
-      - uses: actions/cache@v3
-        with:
-          path: ${{ steps.yarn-cache.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock', 'patches/*.patch') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
+        uses: c-hive/gha-yarn-cache@v2
 
       - name: 📦 Install dependencies
         run: yarn install --immutable
@@ -53,15 +60,7 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: 📪 Get yarn cache
-        id: yarn-cache
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-
-      - uses: actions/cache@v3
-        with:
-          path: ${{ steps.yarn-cache.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock', 'patches/*.patch') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
+        uses: c-hive/gha-yarn-cache@v2
 
       - name: 📦 Install dependencies
         run: yarn install --immutable
@@ -97,15 +96,7 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: 📪 Get yarn cache
-        id: yarn-cache
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-
-      - uses: actions/cache@v3
-        with:
-          path: ${{ steps.yarn-cache.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock', 'patches/*.patch') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
+        uses: c-hive/gha-yarn-cache@v2
 
       - name: 📦 Install dependencies
         run: yarn install --immutable
@@ -113,11 +104,37 @@ jobs:
       - name: 📦 Build
         run: expo build:web
 
-      - name: 📦 Deploy
+      - name: 📦 Find PR
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+        with:
+          # Can be "open", "closed", or "all".  Defaults to "open".
+          state: open
+
+      # This will echo "Your PR is 7", or be skipped if there is no current PR.
+      - name: 💡 Check if PR is found
+        run: echo "Your PR is ${PR}"
+        if: success() && steps.findPr.outputs.number
+        env:
+          PR: ${{ steps.findPr.outputs.number }}
+
+      - name: 📦 Deploy the PR
+        if: steps.findPr.outputs.number
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
+          working-directory: ./web-build
+          alias-domains: |
+            pr-${{ steps.findPr.outputs.pr }}.parthibanbaskar.vercel.app
+
+      - name: 📦 Deploy main branch
+        if: success() && !steps.findPr.outputs.number
         uses: amondnet/vercel-action@v20
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-args: '--prod'
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}} 
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
           working-directory: ./web-build
