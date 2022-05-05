@@ -98,6 +98,9 @@ jobs:
       - name: 📦 Build
         run: expo build:web
 
+      - name: 💡 Get PR number
+        run:   echo ::set-env name=PR_NUMBER::$(echo "$GITHUB_REF" | awk -F / '{print $3}')
+        shell: bash
 
       - name: 📦 Deploy
         uses: amondnet/vercel-action@v20
@@ -108,4 +111,4 @@ jobs:
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
           working-directory: ./web-build
           alias-domains: |
-            pr-${{github.event.number}}.parthibanbaskar.vercel.app
+            pr-${{PR_NUMBER}}.parthibanbaskar.vercel.app
