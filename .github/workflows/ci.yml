@@ -125,7 +125,7 @@ jobs:
             pr-${{ steps.findPr.outputs.pr }}.parthibanbaskar.vercel.app
 
       - name: 📦 Deploy main branch
-        if: '!${{steps.findPr.outputs.number}}'
+        if: ${{steps.findPr.outputs.number}} === null || ${{steps.findPr.outputs.number}} === undefined
         uses: amondnet/vercel-action@v20
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
