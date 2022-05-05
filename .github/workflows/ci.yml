@@ -124,7 +124,6 @@ jobs:
       #     alias-domains: |
       #       pr-${{ steps.findPr.outputs.pr }}.parthibanbaskar.vercel.app
       
-      - name: 📦 Deploy the PR check
       - run: "echo ${{steps.findPr.outputs.number}} == null || ${{steps.findPr.outputs.number}} == undefined"
       - run: "echo ${{steps.findPr.outputs.number}} == undefined"
       - run: "echo ${{steps.findPr.outputs.number}} == null"
