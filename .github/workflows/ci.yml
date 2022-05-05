@@ -121,4 +121,4 @@ jobs:
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
           working-directory: ./web-build
           alias-domains: |
-            pr-${{PR}}.parthibanbaskar.vercel.app
+            pr-${{ steps.findPr.outputs.pr }}.parthibanbaskar.vercel.app
