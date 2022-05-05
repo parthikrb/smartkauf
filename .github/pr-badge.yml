@@ -15,6 +15,6 @@
 - label: 'Preview'
   message: 'Click here!'
   color: 'yellow'
-  url: 'https://pr-${{github.event.number}}.parthibanbaskar.vercel.app'
+  url: 'https://pr-{{context.issue.number}}.parthibanbaskar.vercel.app'
 - message: '$commits commits across $changedFiles files'
   color: 'crimson'
