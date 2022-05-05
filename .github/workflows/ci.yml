@@ -102,6 +102,9 @@ jobs:
       - name: 📦 Build
         run: expo build:web
 
+      - name: 📦 Publish
+        run: "echo `${{PR_NUMBER}}` > .github/pr-number"
+
       - name: 📦 Deploy
         uses: amondnet/vercel-action@v20
         with:
