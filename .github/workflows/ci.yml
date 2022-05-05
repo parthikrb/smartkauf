@@ -106,11 +106,11 @@ jobs:
           state: open
 
       # This will echo "Your PR is 7", or be skipped if there is no current PR.
-      - name: 💡 Check if PR is found
-        run: echo "Your PR is ${PR}"
-        if: success() && steps.findPr.outputs.number
-        env:
-          PR: ${{ steps.findPr.outputs.number }}
+      # - name: 💡 Check if PR is found
+      #   run: echo "Your PR is ${PR}"
+      #   if: success() && steps.findPr.outputs.number
+      #   env:
+      #     PR: ${{ steps.findPr.outputs.number }}
 
 
       - run: "echo pr-${PR}.parthibanbaskar.vercel.app"
