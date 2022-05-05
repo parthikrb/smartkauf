@@ -13,6 +13,6 @@
   color: 'green'
   when: '$additions < 200 || $deletions < 200'
 - label: 'Preview'
-  url: 'https://pr-$prNumber.parthibanbaskar.vercel.app'
+  url: 'https://pr-$prNumber.smartkauf-xyz'
 - message: '$commits commits across $changedFiles files'
   color: 'crimson'
