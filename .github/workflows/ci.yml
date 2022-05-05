@@ -110,7 +110,7 @@ jobs:
         run: echo "Your PR is ${PR}"
         if: success() && steps.findPr.outputs.number
         env:
-          PR: ${{ steps.findPr.outputs.pr }}
+          PR: ${{ steps.findPr.outputs.number }}
 
       - name: 📦 Deploy test
         run: "echo pr-${PR}.parthibanbaskar.vercel.app"
@@ -127,7 +127,7 @@ jobs:
       #       pr-${{ steps.findPr.outputs.pr }}.parthibanbaskar.vercel.app
 
       - name: 📦 Deploy main branch
-        if: github.event_name == 'push'
+        if: success() && !steps.findPr.outputs.number
         uses: amondnet/vercel-action@v20
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
