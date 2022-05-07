@@ -2143,13 +2143,6 @@
     slash "^3.0.0"
     strip-ansi "^6.0.0"
 
-"@jest/create-cache-key-function@^26.6.2":
-  version "26.6.2"
-  resolved "https://registry.yarnpkg.com/@jest/create-cache-key-function/-/create-cache-key-function-26.6.2.tgz#04cf439207a4fd12418d8aee551cddc86f9ac5f5"
-  integrity sha512-LgEuqU1f/7WEIPYqwLPIvvHuc1sB6gMVbT6zWhin3txYUNYK/kGQrC1F2WR4gR34YlI9bBtViTm5z98RqVZAaw==
-  dependencies:
-    "@jest/types" "^26.6.2"
-
 "@jest/create-cache-key-function@^27.0.1", "@jest/create-cache-key-function@^28.0.0":
   version "28.0.0"
   resolved "https://registry.yarnpkg.com/@jest/create-cache-key-function/-/create-cache-key-function-28.0.0.tgz#eecaedc4e3a1b1aa2edfd13c9ee096226d07dd1d"
@@ -5797,7 +5790,18 @@ expo-manifests@~0.3.0:
   dependencies:
     expo-json-utils "~0.3.0"
 
-expo-modules-autolinking@0.7.1, expo-modules-autolinking@~0.7.0:
+expo-modules-autolinking@0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/expo-modules-autolinking/-/expo-modules-autolinking-0.8.0.tgz#d380e0de6848f71d7c99d46100608f6030eb66c8"
+  integrity sha512-dFypBI1bnT62mNRI6B1KxnHqvbvr+vzqqAjZZ7Tud8VUIHGl4MpeNHNAoeGdmjX+rJsGjC1y70OvtwYjUWiMLw==
+  dependencies:
+    chalk "^4.1.0"
+    commander "^7.2.0"
+    fast-glob "^3.2.5"
+    find-up "^5.0.0"
+    fs-extra "^9.1.0"
+
+expo-modules-autolinking@~0.7.0:
   version "0.7.1"
   resolved "https://registry.yarnpkg.com/expo-modules-autolinking/-/expo-modules-autolinking-0.7.1.tgz#edd6da36cc28112d054e82dbb176fe4dccd7d476"
   integrity sha512-HKPcwXuRztEjhQRHxwhLXyAblkOsSi3n7aaBV6qgrOOi0WL/E3di8E2fowlHiiQW/i9vJDemMcvq0ZTCYW+bFg==
@@ -5849,10 +5853,10 @@ expo-updates@0.13.1:
     resolve-from "^5.0.0"
     uuid "^3.4.0"
 
-expo@45.0.0:
-  version "45.0.0"
-  resolved "https://registry.yarnpkg.com/expo/-/expo-45.0.0.tgz#f13ef04a0148968126a5908cb718563f0296010d"
-  integrity sha512-tcJCgQcwWeXeX3Z0lEWlbojmPxskS0k89Na+6O5iRyk0FyY35587cmYiR3NPNxhQCirWuNsoLIsrXhZFL3aG2w==
+expo@45.0.1:
+  version "45.0.1"
+  resolved "https://registry.yarnpkg.com/expo/-/expo-45.0.1.tgz#e7fbf8947dae33bbdd97f9eb45e6dc23eadce4b6"
+  integrity sha512-pHGPU/b53TYtaMmzKG9aNliKA4EpHno5svTZQ8EGFBz8f+VManZFfR306x3raMFPqj8sXv0Wfm39f0+pqx9l2A==
   dependencies:
     "@babel/runtime" "^7.14.0"
     "@expo/cli" "0.1.4"
@@ -5865,7 +5869,7 @@ expo@45.0.0:
     expo-file-system "~14.0.0"
     expo-font "~10.1.0"
     expo-keep-awake "~10.1.1"
-    expo-modules-autolinking "0.7.1"
+    expo-modules-autolinking "0.8.0"
     expo-modules-core "0.9.1"
     fbemitter "^3.0.0"
     getenv "^1.0.0"
@@ -7577,13 +7581,13 @@ jest-environment-node@^28.1.0:
     jest-mock "^28.1.0"
     jest-util "^28.1.0"
 
-jest-expo@45.0.0:
-  version "45.0.0"
-  resolved "https://registry.yarnpkg.com/jest-expo/-/jest-expo-45.0.0.tgz#3885c68fff4194dc202a571a5fd9ef42248263d7"
-  integrity sha512-tI9HbRPBnT6A6avsqNg/VUisCwhxeL3bv/JOJWTfujvmw+PdLpnm13EloY7JkMi4dnHHU77OfBMmh6f+PJI6Cw==
+jest-expo@45.0.1:
+  version "45.0.1"
+  resolved "https://registry.yarnpkg.com/jest-expo/-/jest-expo-45.0.1.tgz#59b26f30cb2198d7b5aa17886f08b31b38482ad1"
+  integrity sha512-45+QiO6FRnYgJKavhUly53NRBtld68SGAsHUGUOgL3XkAcwfDLqnaWyeWwbuqT1BjKp99lisg7Iaw5mUlB/WYw==
   dependencies:
     "@expo/config" "^6.0.14"
-    "@jest/create-cache-key-function" "^26.6.2"
+    "@jest/create-cache-key-function" "^27.0.1"
     babel-jest "^26.6.3"
     find-up "^5.0.0"
     jest-watch-select-projects "^2.0.0"
