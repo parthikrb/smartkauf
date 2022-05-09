@@ -1,0 +1,18 @@
+pull_request_rules:
+  - name: Automatic merge ⬇️ on approval ✔
+    conditions:
+      - and:
+        - "#approved-reviews-by>=1"
+        - check-success=t_unit
+        - check-success=t_e2e
+        - check-success=deploy
+    actions:
+      merge:
+        method: merge
+  - name: automatic update for PR marked as “Ready-to-Go“
+    conditions:
+      - -conflict # skip PRs with conflicts
+      - -draft # filter-out GH draft PRs
+      - label="Ready-to-Go"
+    actions:
+      update:
