@@ -92,7 +92,7 @@
     "eslint-plugin-react": "7.29.4",
     "eslint-plugin-react-hooks": "4.5.0",
     "eslint-plugin-unicorn": "42.0.0",
-    "husky": "7.0.4",
+    "husky": "8.0.0",
     "identity-obj-proxy": "3.0.0",
     "jest-coverage-badges": "1.1.2",
     "jest-transform-stub": "2.0.0",
