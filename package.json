@@ -32,7 +32,7 @@
     }
   },
   "dependencies": {
-    "@apollo/client": "3.6.2",
+    "@apollo/client": "3.6.4",
     "@expo/vector-icons": "13.0.0",
     "@react-native-segmented-control/segmented-control": "2.4.0",
     "@react-navigation/bottom-tabs": "6.3.1",
