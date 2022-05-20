@@ -52,7 +52,7 @@ Cypress.Commands.add('deleteStore', (name: string) => {
   const storeState = getStoreState();
   if (storeState.length === 0) return;
 
-  cy.findByTestId(name).click();
+  cy.findAllByTestId(name).first().click();
   cy.findByTestId('deleteStore').click();
 });
 
