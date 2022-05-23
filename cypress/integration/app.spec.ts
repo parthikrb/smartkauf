@@ -14,7 +14,7 @@ describe('App', () => {
 
   it('should create a store with given name', () => {
     cy.addStore(STORE_NAME);
-    cy.findByTestId(STORE_NAME).scrollIntoView().should('have.text', STORE_NAME);
+    cy.findAllByTestId(STORE_NAME).first().scrollIntoView().should('have.text', STORE_NAME);
   });
 
   it('should have the default navbar menu', () => {
