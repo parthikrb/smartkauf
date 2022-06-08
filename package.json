@@ -96,7 +96,7 @@
     "identity-obj-proxy": "3.0.0",
     "jest-coverage-badges": "1.1.2",
     "jest-transform-stub": "2.0.0",
-    "lint-staged": "12.5.0",
+    "lint-staged": "13.0.0",
     "prettier": "2.6.2",
     "react-native-gesture-handler": "2.4.2",
     "react-native-reanimated": "2.8.0",
