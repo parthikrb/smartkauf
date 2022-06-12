@@ -60,7 +60,7 @@
     "react-native-btr": "2.1.4",
     "react-native-dotenv": "3.3.1",
     "react-native-safe-area-context": "4.3.1",
-    "react-native-web": "0.17.7",
+    "react-native-web": "0.18.0",
     "sentry-expo": "4.2.0"
   },
   "devDependencies": {
