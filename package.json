@@ -78,7 +78,7 @@
     "@testing-library/cypress": "8.0.3",
     "@testing-library/dom": "8.13.0",
     "@testing-library/react-native": "9.1.0",
-    "@types/jest": "27.5.2",
+    "@types/jest": "28.1.1",
     "@types/react": "18.0.1",
     "@types/react-instantsearch-native": "6.3.2",
     "@types/react-native": "0.67.8",
