@@ -76,7 +76,7 @@
     "@graphql-codegen/typescript-react-apollo": "3.2.16",
     "@react-native/assets": "1.0.0",
     "@testing-library/cypress": "8.0.3",
-    "@testing-library/dom": "8.13.0",
+    "@testing-library/dom": "8.14.0",
     "@testing-library/react-native": "9.1.0",
     "@types/jest": "28.1.1",
     "@types/react": "18.0.1",
