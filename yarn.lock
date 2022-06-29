@@ -3135,10 +3135,10 @@
     "@sentry/types" "6.19.7"
     tslib "^1.9.3"
 
-"@sentry/react-native@4.0.0":
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/@sentry/react-native/-/react-native-4.0.0.tgz#ca663b75dc86c1630c95e628c4140192e6b7d82c"
-  integrity sha512-cp+urfa6GLH6Hw+4fiNEqOSF/+acZ2LZlem8YRCBFLtk/5WUeFJT0nAlBgWNa8IlnngJovmxzIrfz048LNX3IA==
+"@sentry/react-native@4.0.2":
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/@sentry/react-native/-/react-native-4.0.2.tgz#32fdd5d4534c875e20c2541d9607b80c76359a85"
+  integrity sha512-NLYHpytBGnT487J7w0ZOWhjJZs3sAY9K8A/+j3EsPQyCz6w/eT2hDst5zXWCsylMuwXjqDaHtbxOlT9AC7LkvQ==
   dependencies:
     "@sentry/browser" "7.1.1"
     "@sentry/cli" "^1.74.4"
