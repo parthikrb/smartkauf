@@ -64,7 +64,7 @@
     "sentry-expo": "4.2.0"
   },
   "devDependencies": {
-    "@babel/core": "7.18.10",
+    "@babel/core": "7.24.3",
     "@graphql-codegen/add": "3.2.0",
     "@graphql-codegen/cli": "2.9.1",
     "@graphql-codegen/fragment-matcher": "3.3.0",
