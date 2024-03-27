@@ -79,7 +79,7 @@
     "@testing-library/dom": "8.17.1",
     "@testing-library/react-native": "10.1.1",
     "@types/jest": "28.1.7",
-    "@types/react": "18.0.1",
+    "@types/react": "18.2.73",
     "@types/react-instantsearch-native": "6.3.2",
     "@types/react-native": "0.68.0",
     "@types/react-test-renderer": "18.0.0",
